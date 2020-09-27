@@ -1,6 +1,8 @@
 ---
-123 typora-root-url: images
+typora-root-url: images
 ---
+
+
 
 ## day28 反射
 
@@ -8,7 +10,7 @@ Java Reflection
 
 Reflection（反射）视为动态语言的关键，反射机制允许程序在允许期间借助于Reflection API取到任何类的内部的信息，并能直接操作任意对象的内部属性以及方法
 
-加载完类后，在堆内存的方法区中就产生了一个Class类型的对象 一个类只有一个Class对象，这个对象就包含了完整的类的结构信息，我肯可以通过这个对象看到类的结构，这个对象就像一面镜子，透过这个镜子看到类的结构，所以我们称之为反射
+加载完类后，在堆内存的方法区中就产生了一个Class类型的对象 一个类只有一个Class对象，这个对象就包含了完整的类的结构信息，我们可以通过这个对象看到类的结构，这个对象就像一面镜子，透过这个镜子看到类的结构，所以我们称之为反射
 
 正常方式：==》 引入需要的 “包类”名称 ==》通过new实例化==》取到实例化对象
 
@@ -177,7 +179,7 @@ public class ReflectionTest {
 
 当程序主动使用某个类时，如果该类还未被加载到内存中，则系统会通过如下三个步骤对该类进行初始化
 
- ![](/Snipaste_2020-09-26_11-09-41.png)
+ ![](Snipaste_2020-09-26_11-09-41.png)
 
 ![](/Snipaste_2020-09-26_11-15-54.png)
 
@@ -1859,7 +1861,7 @@ dropWhile的行为与takeWhile相反，I返回剩余的元素。
 
 
 
-一、局部变量类型推断
+### 一、局部变量类型推断
 
 ●产生背景
 开发者经常抱怨Java中引用代码的程度。局部变量的显示类型声明，常常被认为
@@ -1874,3 +1876,119 @@ LinkedHashSet<Integer> set = new LinkedHashSet<>();
 ➢场景二:返回值类型含复杂泛型结构
 变量的声明类型书写复杂且较长，尤其是加上泛型的使用
 Iterator<Map. Entry< Integer, Student>> iterator = set. iterator();
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_16-10-15.png)
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_16-11-01.png)
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_16-11-19.png)
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_16-12-05.png)
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_16-12-35.png)
+
+
+
+
+
+
+
+## Java11新特性概述
+
+
+
+北京时间2018年9月26日，Oracle官方宣布Java 11正式发布。这是Java大版本周期变化后的第一个长期支持版本，非常值得关注。从官网即可下载,最新发布的Java11 将带来ZGCHttp Client 等重要特性，-共包含17个JEP (JDK Enhancement Proposals，JDK 增强提案)。其实，总共更新不止17个，只是我们更关注如下的17个JEP更新。
+
+JDK 11将是-一个企业不可忽视的版本。从时间节点来看，JDK 11的发布正好处在JDK8免费更新到期的前夕，同时JDK9、10也陆续成为“历史版本”，下面是Oracle JDK支持路线图:
+
+
+
+JDK11是一一个长期支持版本(LTS, Long-Term-Support )
+●对于企业来说，选择11将意味着长期的、可靠的、可预测的技术路线图。其中免费的OpenJDK11确定将得到OpenJDK 社区的长期支持，LTS 版本将:是可以放心选择的版本。
+
+●从JVM GC的角度，JDK11 引入了两种新的GC，其中包括也许是划时代意义的ZGC，虽然其目前还是实验特性，但是从能力上来看，这是JDK的一一个巨大突破，为特定生产环境的苛刻需求提供了一个可能的选择。例如，对部分企业核心存储等产品，如果能够保证不超过10ms的GC暂停，可靠性会上一个大的台阶，这是过去我们进行GC调优几乎做不到的，是能与不能的问题。
+
+
+
+一、String类方法
+
+```java
+![Snipaste_2020-09-27_17-09-42](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_17-09-42.png)  @Test
+    public void test1() {
+        // isBlank() 判断字符空白
+        System.out.println("   ".isBlank());
+        // strip() 去除收尾空白
+        System.out.println("------" + "\t abc \t \n".strip() + "-------");
+        // stripTraling()  去除尾部空格
+        System.out.println("------" + "\t abc \t \n".stripTrailing() + "-------");
+        // stripLeading() 去除头部空格
+        System.out.println("------" + "\t abc \t \n".stripLeading() + "-------");
+//        repeat(int count)
+        String str1 = "abc";
+        String str2 = str1.repeat(5);
+        System.out.println(str2);
+
+        // lines.count() 行数统计
+        String str3 = "abc\ndef\ng";
+        System.out.println(str3.lines().count());
+    }
+```
+
+##### 二、Optional加强
+
+Optional也增加了几个非常酷的方法，现在可以很方便的将-一个 Optional 转换
+成一个Stream,或者当- -个空Optional时给它一一个 替代的。
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_16-41-33.png)
+
+
+
+#### 三、局部变量类型推断升级
+
+在var上添加注解的语法格式，在jdk10上不能实现的，在Jdk11中加入了这样的语法
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_17-09-42.png)
+
+#### 四、全新的HTTP客户端API
+
+- HTTP，用于传输网页的协议，早在1997年就被采用在目前的1.1版本中。直到2015年，HTTP2才成为标准。
+- HTTP/1.1和HTTP/2的主要区别是如何在客户端和服务器之间构建和传输数据。HTTP/1.1依赖于请求/响应周期。HTTP/2 允许服务器“push”数据:它可以发送比客户端请求更多的数据。这使得它可以优先处理并发送对于首先加载网页至关重要的数据。
+- 这是Java 9开始引入的一一个处理HTTP请求的的HTTP Client API,该API支持同步和异步，而在Java 11中已经为正式可用状态，你可以在，java.net包中找到这个API。
+- 它将替代仪适用于blocking 模式的HttpURLConnection( HttpURLConnection是在HTTP 1.0的时代创建的，并使用了协议无关的方法)，并提供对WebSocket 和HTTP/2的支持。让天下没方难学的1
+
+
+
+#### 七、ZGC
+
+> GC是java主要优势之-一。 然而，当GC停顿太长，就会开始影响应用的响应时间。消除或者减少GC停顿时长，java将对更广泛的应用场景是-一个更有吸引力的平台。此外，现代系统中可用内存不断增长，用户和程序员希望JVM能够以高效的方式充分利用这些内存,并且无需长时间的GC暂停时间。
+>
+>  ZGC, A Scalable L ow-L atency Garbage Collector(Experimental)ZGC,这应该是JDK11最为瞩目的特性，没有之-一。 但是后面带了Experimental,说明这还不建议用到生产环境。
+>
+> ZGC是一一个并发，基于region,压缩型的垃圾收集器，只有root扫描阶段会STW(stop the world),因此GC停顿时间不会随着堆的增长和存活对象的增长而变长。
+
+#### 优势:
+
+GC暂停时间不会超过10ms既能处理几百兆的小堆，也能处理几个T的大堆(OMG)和G1相比,应用吞吐能力不会下降超过15% 为未来的GC功能和利用colord指针以及Load barriers优化奠定基础 初始只支持64位系统
+
+ZGC的设计目标是:支持TB级内存容量，暂停时间低(<10ms) ，对整个程序吞吐量的影响小于15%。将 来还可以扩展实现机制，以支持不少令人兴奋的功能，例如多层堆(即热对象置于DRAM和冷对象置于NVMe闪存) ,或压缩堆。
+
+
+
+## 在当前JDK中看不到什么
+
+#### 一个标准化和轻量级的JSON API
+
+- 一个标准化和轻量级的JSON API被许多Java开发人员所青睐，但是由于资金问题无法在当前java版本中见到，但并不会被削减到，Java平台首席架构师Mark Reinhold在JDK 9邮件列表中说：这个JEP将是平台上一个有用的补充，但是在计划中，他并不像Oracle资助的其他功能那么重要，可能会重写考虑JDK 10或更高版本中实现
+- 新的货币API
+  对许多应用而言货币价值都是一-个关键的特性，但JDK对此却几乎没有任何支持。严格来讲，现有的java.util.urrency类只是代表了当前ISO 4217货币的一- 个数据结构，但并没有关联的值或者自定义货币。JDK对 货币的运算及转换也没有内建的支持，
+  更别说有一个能够代表货币值的标准类型了。
+- 此前，Oracle公布的JSR 354定义了一套新的Java货币API: JavaMoney, 计划会在Java9中正式引入。但是目前没有出现在JDK新特性中。
+- 不过，如果你用的是Maven的话，可以做如下的添加，即可使用相关的API处理货币: 
+
+![](D:\java\脑图\JavaSE\images\Snipaste_2020-09-27_17-54-18.png)
+
+#### 展望
+
+- 随着云计算和Al等技术浪潮，当前的计算模式和场景正在发生翻天覆地的变化，不仅对Java 的发展速度提出了更高要求，也深刻影响着Java技术的发展方向。传统的大型企业或互联网应用，正在被云端、容器化应用、模块化的微服务甚至是函数(FaaS，Function-as-a-Service)所 替代。
+- Java 虽然标榜面向对象编程，却毫不顾忌的加入面向接口编程思想，又扯出匿名对象之概念，每增加一个新的东西，对Java的根本所在的面向对象思想的一次冲击。反观Python， 抓住面向对象的本质，又 能在函数编程思想方面游刃有余。Java对标C/C++，以抛掉内存管理为卖点，却又陷入了JVM优化的噩梦。选择比努力更重要，选择Java的人更需要对它有更清晰的认识。
+- Java 需要在新的计算场景下，改进开发效率。这话说的有点笼统，我谈- -些自己的体会，Java代码虽然进行了一些类型推断等改进，更易用的集合API等，但仍然给开发者留下了过于刻板、形式主义的印象，这是一一个长期的改进方向。
