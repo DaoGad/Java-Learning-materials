@@ -820,3 +820,729 @@ class B extends Base {
 ```
 
  
+
+### 2.7 开闭原则
+
+#### 	2.7.1基本介绍
+
+1、开闭原则(Open Closed Principle)是编程中**最基础、最重要**的设计原则
+
+2、一个软件实体如类，模块和函数应该对扩展开放**(对提供方)，对修改关闭(对使用**
+**方。**用抽象构建框架，用实现扩展细节。
+
+3、当软件需要变化时，尽量**通过扩展软件实体**的行为来实现变化，而不是**通过修改**已
+有的代码来实现变化。
+
+4、编程中遵循其它原则，以及使用设计模式的目的就是遵循开闭原则。
+
+#### 	2.7.2 看下面一段代码
+
+看一个画图形的功能
+
+![](/Snipaste_2020-09-29_11-56-10.png)
+
+
+
+代码演示
+
+```java
+package com.atguigu.principle.ocp;
+
+
+/**
+ * @author gcq
+ * @Create 2020-09-28
+ */
+public class Ocp {
+
+    public static void main(String[] args) {
+        // 使用看看存在的问题
+        GraphicEditor graphicEditor = new GraphicEditor();
+        graphicEditor.drawShape(new Rectangle());
+        graphicEditor.drawShape(new Circle());
+        graphicEditor.drawShape(new Triangle());
+        graphicEditor.drawShape(new A());
+    }
+}
+// 这是一个用于绘图的类
+class GraphicEditor {
+    public void drawShape(Shape s) {
+        if (s.m_type == 1) {
+            drawRectangle(s);
+        } else  if (s.m_type == 2) {
+            drawCircle(s);
+        } else if (s.m_type == 3) {
+            drawTriangle(s);
+        } else if (s.m_type == 4) {
+
+        }
+    }
+    public void drawRectangle(Shape r) {
+        System.out.println("绘制矩形");
+    }
+    public void drawCircle(Shape r) {
+        System.out.println("绘制圆形");
+    }
+    public void drawTriangle(Shape r) {
+        System.out.println("绘制三角形");
+    }
+    public void drawA(Shape r) {
+        System.out.println("绘制A");
+    }
+}
+// Shape类 基类
+class Shape {
+    int m_type;
+}
+class Rectangle extends Shape {
+    Rectangle() {
+        super.m_type = 1;
+    }
+}
+class Circle extends Shape {
+    Circle() {
+        super.m_type = 2;
+    }
+}
+//新增画三角形
+class Triangle extends Shape {
+    Triangle() {
+        super.m_type = 3;
+    }
+}
+class A extends Shape {
+    A() {
+        super.m_type = 4;
+    }
+}
+```
+
+
+
+####  2.7.3 方式1 的优缺点
+
+1. 优点是比较好理解，简单易操作
+2. 缺点是违反了设计模式的ocp原则，即对扩展开放(提供方)，对修改关闭(使用方)。即当我们给类增加新功能的时候，尽量不修改代码，或者尽可能少修改代码.
+3. 比如我们这时要新增加一个图形种类三角形，我们需要做如下修改，修改的地方较多
+4. 代码演示
+
+
+
+方式 1改进思路分析
+
+#### 	2.7.4 改进思路分析
+
+思路:把创建Shape类做成抽象类，并提供- -个抽象的draw方法，让子类去实现即可，这样我们有新的图形种类时，只需要让新的图形类继承Shape,并实现draw方法即可，使用方的代码就不需要修>满足了 开闭原则
+
+改进后代码
+
+```java
+package com.atguigu.principle.ocp.improve;
+
+
+/**
+ * @author gcq
+ * @Create 2020-09-28
+ */
+public class Ocp {
+
+    public static void main(String[] args) {
+        // 使用看看存在的问题
+        GraphicEditor graphicEditor = new GraphicEditor();
+        graphicEditor.drawShape(new Rectangle());
+        graphicEditor.drawShape(new Circle());
+        graphicEditor.drawShape(new Triangle());
+        graphicEditor.drawShape(new OtherGraphic());
+    }
+}
+
+// 这是一个用于绘图的类
+class GraphicEditor {
+    // 接收Shape对象，然后根据type，来绘制不同的图形
+    public void drawShape(Shape s) {
+        s.draw();
+    }
+
+}
+
+// Shape类 基类
+abstract class Shape {
+    int m_type;
+    // 抽象方法
+    public abstract void draw();
+}
+
+class Rectangle extends Shape {
+    Rectangle() {
+        super.m_type = 1;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("绘制矩形");
+    }
+}
+
+class Circle extends Shape {
+    Circle() {
+        super.m_type = 2;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("绘制圆形");
+    }
+}
+
+//新增画三角形
+class Triangle extends Shape {
+    Triangle() {
+        super.m_type = 3;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("绘制三角形");
+    }
+}
+
+//新增一个图形
+class OtherGraphic extends Shape {
+    OtherGraphic() {
+        super.m_type = 4;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("七边形");
+    }
+}
+```
+
+
+
+### 2.8 迪米特法则
+
+#### 	2.8.1 基本介绍
+
+1、一个对象应该对其他对象保持最少的了解
+
+2、类与类关系越密切，耦合度越大
+
+3、迪米特法则(Demeter Principle)又叫**最少知道原则**，即一个**类对自己依赖的类知道的越少越好**。也就是说，对于被依赖的类不管多么复杂，都尽量将逻辑封装在类的内部。对外除了提供的public方法，不对外泄露任何信息
+
+4、迪米特法则还有个更简单的定义:只与直接的朋友通信
+
+5、**直接的朋友**: 每个对象都会与其他对象有**耦合关系**，只要两个对象之间有耦合关系，我们就说这两个对象之间是朋友关系。耦合的方式很多，依赖，关联，组合，聚合等。其中，我们称出现**成员变量，方法参数，方法返回值**中的类为直接的朋友，而出现在**局部变量中的类不是直接的朋友**。也就是说，陌生的类最好不要以局部变量的形式出现在类的内部。
+
+#### 	2.8.2 应用实例
+
+1、有一个学校，下属有各个学院和总部，现要求打印出学校总部员工ID和学院员工的id 
+2、编程实现上面的功能，看代码演示
+
+3、代码演示
+
+```java
+package com.atguigu.principle.demeter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author gcq
+ * @Create 2020-09-29
+ */
+// 客户端
+public class Demter {
+
+    public static void main(String[] args) {
+        SchoolManager schoolManager = new SchoolManager();
+        schoolManager.printAllEmployee(new CollegeManager());
+    }
+}
+// 学校总部员工类
+class Employee {
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}
+
+// 学院员工类
+class CollegeEmployee {
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}
+// 学院管理类
+class CollegeManager {
+    // 返回学院所有员工
+    public List<CollegeEmployee> getAllEmployee() {
+        List<CollegeEmployee> list = new ArrayList<CollegeEmployee>();
+        // 增加了10个员工到list集合
+        for(int i = 0; i < 10; i++) {
+            CollegeEmployee emp = new CollegeEmployee();
+            emp.setId("学院员工id=" + i);
+            list.add(emp);
+        }
+        return list;
+    }
+
+}
+
+// 分析 SchoolManager 类的直接朋友类有那些 Employee CollegeManager
+// CollegeEmployee 不是直接朋友而是一个陌生类，违反了迪米特法则
+// 学校管理类
+class SchoolManager {
+    // 返回学校总部的员工
+    public List<Employee> getAllEmployee() {
+        List<Employee> list = new ArrayList<Employee>();
+        for(int i = 0; i < 5; i++) {
+            Employee emp = new Employee();
+            emp.setId("学校员工id=" + i);
+            list.add(emp);
+        }
+        return list;
+    }
+    // 该方法完成输出学校总部和学院员工的信息id
+    void printAllEmployee(CollegeManager sub) {
+        // 分析问题
+        // 1、这里的CollegeEmployee 不是 SchoolManager 直接朋友
+        //  2、CollegeEmployee 是以局部变量的方式出现在 SchoolManager
+        // 3、违反了迪米特法则
+
+        // 将输出学院的员工方法，封装到 CollegeManager
+        // 获取到学院员工
+        List<CollegeEmployee> list1 = sub.getAllEmployee();
+        System.out.println("---------------分公司员工----------------");
+        for (CollegeEmployee e: list1) {
+            System.out.println(e.getId());
+        }
+
+        // 获取到学校总部员工
+        List<Employee> list2 = this.getAllEmployee();
+        System.out.println("---------------学校总部员工---------------");
+        for (Employee e : list2) {
+            System.out.println(e.getId());
+        }
+    }
+}
+```
+
+
+
+#### 	2.8.3 应案例改进
+
+1、前面设计的问题在于SchoolManager中，CollegeEmployee 类并不是SchoolManager类的直接朋(分析)
+
+2、按照迪米特法则，应该避免类中出现这样非直接朋友关系的耦合
+
+3、对代码按照迪米特法则进行改进. (看老师演示)
+
+```java
+package com.atguigu.principle.demeter.improve;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author gcq
+ * @Create 2020-09-29
+ */
+// 客户端
+public class Demter {
+
+    public static void main(String[] args) {
+        System.out.println("使用迪米特法则改进");
+        SchoolManager schoolManager = new SchoolManager();
+        schoolManager.printAllEmployee(new CollegeManager());
+    }
+}
+
+// 学校总部员工类
+class Employee {
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}
+
+// 学院员工类
+class CollegeEmployee {
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}
+
+// 学院管理类
+class CollegeManager {
+    // 返回学院所有员工
+    public List<CollegeEmployee> getAllEmployee() {
+        List<CollegeEmployee> list = new ArrayList<CollegeEmployee>();
+        // 增加了10个员工到list集合
+        for(int i = 0; i < 10; i++) {
+            CollegeEmployee emp = new CollegeEmployee();
+            emp.setId("学院员工id=" + i);
+            list.add(emp);
+        }
+        return list;
+    }
+    // 输出学院员工信息
+    public void printEmployee() {
+        List<CollegeEmployee> list1 = getAllEmployee();
+        System.out.println("---------------分公司员工----------------");
+        for (CollegeEmployee e: list1) {
+            System.out.println(e.getId());
+        }
+    }
+}
+
+// 分析 SchoolManager 类的直接朋友类有那些 Employee CollegeManager
+// CollegeEmployee 不是直接朋友而是一个陌生类，违反了迪米特法则
+// 学校管理类
+class SchoolManager {
+    // 返回学校总部的员工
+    public List<Employee> getAllEmployee() {
+        List<Employee> list = new ArrayList<Employee>();
+        for(int i = 0; i < 5; i++) {
+            Employee emp = new Employee();
+            emp.setId("学校员工id=" + i);
+            list.add(emp);
+        }
+        return list;
+    }
+    // 该方法完成输出学校总部和学院员工的信息id
+    void printAllEmployee(CollegeManager sub) {
+        // 分析问题
+        // 1、这里的CollegeEmployee 不是 SchoolManager 直接朋友
+        //  2、CollegeEmployee 是以局部变量的方式出现在 SchoolManager
+        // 3、违反了迪米特法则
+
+        // 将输出学院的员工方法，封装到 CollegeManager
+        // 获取到学院员工
+        sub.printEmployee();
+
+        // 获取到学校总部员工
+        List<Employee> list2 = this.getAllEmployee();
+        System.out.println("---------------学校总部员工---------------");
+        for (Employee e : list2) {
+            System.out.println(e.getId());
+        }
+    }
+}
+```
+
+
+
+#### 	2.8.4 迪米特法则注意事项和细节
+
+1、迪米特法则核心是降低类之间的耦合
+
+2、但是注意：由于每个类都减少了不必要的依赖因此迪米特法则只是要求降低类间(对象间)耦合关系，并不是要求完全没有依赖关系
+
+
+
+### 2.9 合成复用原则(Composite Reuse Principle)
+
+
+
+#### 	2.9.1 基本介绍
+
+原则尽量使用合成/聚合的方式，而不是使用继承
+
+![](/Snipaste_2020-09-29_12-15-38.png)
+
+#### 	
+
+#### 	2.9.10 设计原则核心思想
+
+1、找出应用中可能需要变化之处，把他们独立出来，不要和那些不需要变化的代码混在一起
+
+2、针对接口编程，而不是针对实现编程
+
+3、为了交互对象之间的松耦合设计而努力
+
+
+
+# 第三章 UML 类图
+
+
+
+### 	3.1 UML 基本介绍
+
+1、UML--Unified modeling language UML(统一建模语言)，是一种用于软件系统分析和设计的语言工具，它用于帮助软件开发人员进行思考和记录思路的结果
+
+2、 UML本身是一套符号的规定，就像数学符号和化学符号一样，这些符号用于描述软件模型中的各个元素和他们之间的关系，比如类、接口、实现、泛化、依赖、组合、聚合等，如右图:
+
+![](/Snipaste_2020-09-29_12-56-43.png)
+
+3、使用UML来建模，常用的工具有RationalRose ,也可以使用一些插件来建模
+
+![](/Snipaste_2020-09-29_12-53-30.png)
+
+
+
+#### 	3.2 UML 图
+
+画UML图与写文章差不多，都是把自己的思想描述给别人看，关键在于思路和条理，UML图分类:
+
+1、用例图(use case)
+2、静态结构图:类图、对象图、包图、组件图、部署图
+3、动态行为图:交互图(时序图与协作图)、状态图、活动图
+
+说明：
+
+1、类图是描述类与类之间的关系的，是UML图中最核心的
+2、在讲解设计模式时，我们必然会使用类图，为了让学员们能够把设计模式学到位，需要先给大家讲解类图
+3、温馨提示:如果已经掌握UML类图的学员，可以直接听设计模式的章节
+
+
+
+#### 	3.3 UML 类图
+
+1、用于描述系统中的**类(对象)本身的组成和类(对象)之间的各种静态关系。**
+2、类之间的关系:依赖、泛化(继承)、实现、关联、聚合与组合。
+3、类图简单举例
+
+```java
+public class Person { // 代码形式 ---> 类图
+
+    private Integer id;
+    private String name;
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
+
+}
+```
+
+![](/Snipaste_2020-09-29_13-21-21.png)
+
+
+
+#### 	3.4 类图--依赖关系(Dependence)
+
+只要是在类中用到了对方，那么他们之间就存在依赖关系，如果没有对方，连编译都过不了
+
+```java
+public class PersonServiceBean{
+    private PersonDao personDao;
+    public void save(Person person){}
+    public IDCard getIDCard(Integer personid) {}
+    public void modify(){
+        Department department = new Department();
+    }
+}
+public class PersonDao{}
+public class IDCard{}
+public Person{}
+public class Department{}
+```
+
+![](/Snipaste_2020-09-29_16-16-53.png)
+
+**小结**
+
+1、类中用到了对方
+
+2、如果是**类的成员属性**
+
+3、如果是**方法的返回类型**
+
+4、是方法的**接收参数类型**
+
+5、**方法中使用到**
+
+
+
+#### 	3.5 类图--泛化关系(generalization)
+
+泛化关系实**际上就是继承关系**，他是依赖关系的特例
+
+```java
+public abstract class DaoSupport {
+    public void save(Object entity) {
+        
+    }
+    public void deelte(Object id) {
+        
+    }
+}
+public class PersonServiceBean extends DaoSupport {
+    
+}
+```
+
+对应的类图
+
+![](/Snipaste_2020-09-29_16-27-22.png)
+
+**小结：**
+
+1、泛型关系实际**上就是继承关系**
+
+2、如果 A 类继承了 B 类，我们就说 A 和 B 存在泛化关系
+
+
+
+#### 	3.6 类图--实现关系(Implementation)
+
+实现关系实际上就是**A类实现B接口**，他是依赖关系的特例
+
+```java
+public interface PersonService{
+    public void deelte(Integer id);
+}
+public class PersonServiceBean implements PersonService{
+    public void deletge(Integer id){}
+}
+```
+
+类图
+
+![](/Snipaste_2020-09-29_16-29-36.png)
+
+
+
+#### 	3.7 类图--关联关系(Association)
+
+![](/Snipaste_2020-09-29_16-32-19.png)
+
+
+
+#### 3.8 类图--聚合关系(Aggregation)
+
+ 	**3.8.1基本介绍**	 
+
+​		聚合关系(Aggregation) 表示的是**整体和部分的关系**，**整体与部分可以分开**，聚合关系是**关联关系的特例**，所以他具有关联的**导航性与多重性**
+
+​		如：一台电脑由键盘(keyboard)，显示器(monitor)，鼠标等组成电脑的各个配件可以从电脑上分离出来的，使用带空心菱形的实现来表示
+
+![](/Snipaste_2020-09-29_16-38-16.png)
+
+​	**3.8.1 应用实例**
+
+![](/Snipaste_2020-09-29_16-38-05.png)
+
+
+
+#### 3.9 类图--组合关系(composition)
+
+​		**3.9.1 基本介绍**
+
+组合关系：也是整体与部分的关系，但是**整体与部分不可以分开**，
+
+在看一个案例：在程序中我们定义实体，Person与IDCard 、Head,那么 Head 和 Person 就是 组合 IDCard和 Person就是聚合
+
+
+
+但是如果在程序中 Person实体中定义了对IDCard进行**级联删除**，即删除 Person时连同IDCard 一起删除，那么 IDcard 和 Person就是组合
+
+
+
+ 	**3.9.2 应用案例**
+
+```java
+public class Person{
+    private IDCard card;
+    private Head head = new Head();
+}
+public class IDCard{}
+public class Head{}
+```
+
+对应类图
+
+![](/Snipaste_2020-09-29_16-46-06.png)
+
+案例二
+
+```java
+package com.atguigu.aggregation;
+
+/**
+ * @author gcq
+ * @Create 2020-09-29
+ */
+public class Computer {
+
+    // 鼠标可以和computer不能分离
+    private Moniter moniter = new Mouse();
+    // 显示器可以和computer不能分离
+    private Mouse mouse = new Mouse();
+
+    public void setMoniter(Moniter moniter) {
+        this.moniter = moniter;
+    }
+
+    public void setMouse(Mouse mouse) {
+        this.mouse = mouse;
+    }
+}
+```
+
+```java
+/**
+ * @author gcq
+ * @Create 2020-09-29
+ */
+public class Moniter {
+
+}
+```
+
+```java
+/**
+ * @author gcq
+ * @Create 2020-09-29
+ */
+public class Mouse {
+
+}
+```
+
+![](/Snipaste_2020-09-29_16-48-34.png)
+
+
+
+
+
+## 第 4 章 设计模式概述 
+
+### 	4.1 掌握设计模式的层次
+
+
+
+
+
+
+
+
+
