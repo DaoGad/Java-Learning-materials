@@ -1973,3 +1973,912 @@ enum Singleton {
 1. 单例模式保证了系统内存中该类只存在一个对象，节省了系统资源，对于一些需要频繁创建销毁的对象，使用单例模式可以提高系统性能
 2. 当想实例化一个单例类的时候，必须要记住使用相应的获取对象的方法，而不是使用new
 3. 单例模式**使用的场景**:需要**频繁的进行创建和销毁的对象**、创建对象时耗时过多或耗费资源过多(即:**重量级对象**)，但又经常用到的对象、**工具类对象**、频繁访问数据库或文件的对象(比如**数据源、session**工厂等)
+
+
+
+
+
+# 第 6 章 工厂模式
+
+### 	6.1 简单工厂模式
+
+### 		6.1.1 看一个具体的需求
+
+看一个披萨项目，要便于披萨种类的扩展，要便于维护
+
+1、披萨的种类很多，比如GreekPizz，CheesePiz 等
+
+2、披萨的制作有 prepare准备，bake烤，cut 切 box 包装
+
+3、完成披萨店订购功能
+
+
+
+### 6.1.2 使用传统方式来完成
+
+1、思路分析(类图)
+
+![](/Snipaste_2020-09-30_22-00-03.png)
+
+编写 OrderPizza.java 去订购需要的各种 pizza
+
+2、看老师代码演示
+
+```java
+/* public OrderPizza() {
+     Pizza pizza = null;
+     String orderType; //披萨订购的类型
+     do{
+         orderType = gettype();
+         if (orderType.equals("greek")) {
+             pizza = new GreekPizza();
+             pizza.setName(" 希腊披萨 ");
+         } else if (orderType.equals("cheese")) {
+             pizza = new CheesePizza();
+             pizza.setName(" 奶酪披萨 ");
+         } else if(orderType.equals("pepper")) {
+             pizza = new PepperPizza();
+             pizza.setName("胡椒披萨");
+         } else {
+             break;
+         }
+         // 输出pizza制作过程
+         pizza.prepare();
+         pizza.bake();
+         pizza.cut();
+         pizza.box();
+     }while (true);
+ }*/
+```
+
+
+
+### 6.1.3 传统方式的优缺点
+
+1. 优点是比较好理解，简单易操作
+2. 缺点是违反了设计模式的**ocp原则**，即对扩展开放，对修改关闭。即当我们给类增加新功能的时候，尽量不修改代码，或者尽可能少修改代码.
+3. **比如我们这时要新增加一个**Pizza的种类(Pepper披萨)，我们需要做如下修改.
+
+如果我们增加一个Pizza类，只要是订购Pizza的代码都需要修改
+
+![](/Snipaste_2020-09-30_22-05-25.png)
+
+ 4. 改进思路分析
+
+    分析:修改代码可以接受,但是如果我们在其它的地方也有创建Pizza的代码，就意味着，也需要修改,而创建Pizza的代码，往往有多处。.
+    思路:**把创建Pizza 对象封装到一个类中,这样我们有新的Pizza种类时，只需要修改该类就可**,其它有创建到Pizza对象的代码就不需要修改了.->**简单工厂模式**
+
+
+
+### 6.1.4  简单工厂模式基本介绍
+
+1. 简单工厂模式是属于**创建型模式**，是工厂模式的一种。简单工厂模式是由一-个工厂对象决定创建出哪一种产品类的实例。简单工厂模式是**工厂模式家族中最简单实用的模式.**
+2. 简单工厂模式:定义了一个创建对象的类，由这个类来**封装实例化对象的行为**(代码)
+3. 在软件开发中，当我们会用到大量的创建某种、某类或者某批对象时，就会使用到工厂模式.
+
+
+
+### 6.1.5 使用简单工厂模式
+
+1. 简单工厂模式设计方案，定义一个实例化 Pizza对象的类，封装创建对象的代码
+
+   ![](/Snipaste_2020-09-30_22-09-08.png)
+
+2. 看代码示例：
+
+   ```java
+   package com.atguigu.factory.simplefactory.pizzastore.order;
+   
+   import com.atguigu.factory.simplefactory.pizzastore.pizza.CheesePizza;
+   import com.atguigu.factory.simplefactory.pizzastore.pizza.GreekPizza;
+   import com.atguigu.factory.simplefactory.pizzastore.pizza.PepperPizza;
+   import com.atguigu.factory.simplefactory.pizzastore.pizza.Pizza;
+   
+   /**
+    * 简单工厂
+    *
+    * @author gcq
+    * @Create 2020-09-30
+    */
+   public class SimpleFactory {
+   
+       /**
+        * 根据orderType 返回对应的Pizza 对象
+        * @param orderType
+        * @return
+        */
+       public static Pizza createPizza(String orderType) {
+   
+           Pizza pizza = null;
+           System.out.println("使用简单工厂模式");
+           if (orderType.equals("greek")) {
+               pizza = new GreekPizza();
+               pizza.setName(" 希腊披萨 ");
+           } else if (orderType.equals("cheese")) {
+               pizza = new CheesePizza();
+               pizza.setName(" 奶酪披萨 ");
+           } else if(orderType.equals("pepper")) {
+               pizza = new PepperPizza();
+               pizza.setName("胡椒披萨");
+           }
+           return pizza;
+       }
+       // 简单工厂模式也叫静态工厂模式
+   
+   }
+   ```
+
+```java
+package com.atguigu.factory.simplefactory.pizzastore.order;
+
+import com.atguigu.factory.simplefactory.pizzastore.pizza.CheesePizza;
+import com.atguigu.factory.simplefactory.pizzastore.pizza.GreekPizza;
+import com.atguigu.factory.simplefactory.pizzastore.pizza.PepperPizza;
+import com.atguigu.factory.simplefactory.pizzastore.pizza.Pizza;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+/**
+ * @author gcq
+ * @Create 2020-09-30
+ */
+public class OrderPizza {
+
+   /* public OrderPizza() {
+        Pizza pizza = null;
+        String orderType; //披萨订购的类型
+        do{
+            orderType = gettype();
+            if (orderType.equals("greek")) {
+                pizza = new GreekPizza();
+                pizza.setName(" 希腊披萨 ");
+            } else if (orderType.equals("cheese")) {
+                pizza = new CheesePizza();
+                pizza.setName(" 奶酪披萨 ");
+            } else if(orderType.equals("pepper")) {
+                pizza = new PepperPizza();
+                pizza.setName("胡椒披萨");
+            } else {
+                break;
+            }
+            // 输出pizza制作过程
+            pizza.prepare();
+            pizza.bake();
+            pizza.cut();
+            pizza.box();
+        }while (true);
+    }*/
+
+    //定义一个简单工厂对象
+    SimpleFactory simpleFactory;
+
+    Pizza pizza = null;
+
+    //构造器
+    public OrderPizza(SimpleFactory simpleFactory) {
+        setFactory(simpleFactory);
+    }
+    public void setFactory(SimpleFactory simpleFactory) {
+        // 用户输入的
+        String orderType = "";
+
+        // 设置简单工厂对象
+        this.simpleFactory = simpleFactory;
+        do{
+            orderType = gettype();
+            pizza = this.simpleFactory.createPizza(orderType);
+
+            if (pizza != null) {
+                pizza.prepare();
+                pizza.bake();
+                pizza.cut();
+                pizza.box();
+            } else {
+                System.out.println(" 订购披萨失败");
+                break;
+            }
+        }while(true);
+    }
+
+    //写一个方法 可以获取客户希望订购的披萨类
+    private String gettype() {
+        try {
+            BufferedReader strin = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("input pizza type:");
+            String str = strin.readLine();
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+}
+```
+
+
+
+### 6.2 工厂方法模式
+
+### 6.2.1 看一个新的需求
+
+​	披萨项目新的需求:客户在点披萨时，可以点**不同口味的披萨**，比如北京的奶酪pizza、北京的胡椒pizza或者是伦敦的奶酪pizza、伦敦的胡椒pizza。
+
+### 6.2.1 思路1
+
+​	使用**简单工厂模式**，创建**不同的简单工厂类**，比如BJPizzaSimpleFactory、LDPizzaSimpleFactory等等从当前这个案例来说，也是可以的，但是考虑到项目的规模，以及软件的可维护性、可扩展性并不是特别好
+
+### 6.2.2 思路2
+
+​	使用工厂方法模式
+
+### 6.2.4 工厂方法模式介绍
+
+1、工厂方法模式设计方案:将披萨项目的实例化功能抽象成抽象方法，在不同的口味点餐子类中具体实现。
+
+2、工厂方法模式**:定义了一个创建对象的抽象方法**，由**子类决定要实例化的类。**工厂方法模式将**对象的实例化推迟到子类。**
+
+### 6.2.5 工厂方法模式应用案例
+
+1、披萨项目新的需求:客户在点披萨时，可以点不同口味的披萨，比如北京的奶酪pizza、北京的胡椒pizza或者是伦敦的奶酪pizza、伦敦的胡椒pizza
+
+2、思路分析
+
+![](/Snipaste_2020-09-30_22-15-33.png)
+
+
+
+3、代码实现
+
+```java
+package com.atguigu.factory.factorymethod.pizzastore.order;
+
+
+import com.atguigu.factory.factorymethod.pizzastore.pizza.Pizza;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+/**
+ * @author gcq
+ * @Create 2020-09-30
+ */
+public abstract class OrderPizza {
+
+    // 定义一个抽象方法 createPizza 让各个工厂子类自己实现
+    abstract Pizza createPizza(String orderType);
+
+    public OrderPizza() {
+        Pizza pizza = null;
+        String orderType; //披萨订购的类型
+        do{
+            orderType = gettype();
+            // 抽象方法 由工厂子类完成
+          pizza = createPizza(orderType);
+            // 输出pizza制作过程
+            pizza.prepare();
+            pizza.bake();
+            pizza.cut();
+            pizza.box();
+        }while (true);
+    }
+
+
+
+    //写一个方法 可以获取客户希望订购的披萨类
+    private String gettype() {
+        try {
+            BufferedReader strin = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("input pizza type:");
+            String str = strin.readLine();
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+}
+```
+
+子类实现
+
+```java
+package com.atguigu.factory.factorymethod.pizzastore.order;
+
+import com.atguigu.factory.factorymethod.pizzastore.pizza.BJCheesePizza;
+import com.atguigu.factory.factorymethod.pizzastore.pizza.BJPepperPizza;
+import com.atguigu.factory.factorymethod.pizzastore.pizza.Pizza;
+
+
+/**
+ * @author gcq
+ * @Create 2020-09-30
+ */
+public class BJOrderPizza extends OrderPizza{
+
+    @Override
+    Pizza createPizza(String orderType) {
+        Pizza pizza = null;
+        if (orderType.equals("cheese")) {
+            pizza = new BJCheesePizza();
+        } else if (orderType.equals("pepper")) {
+            pizza = new BJPepperPizza();
+        }
+        return pizza;
+    }
+}
+```
+
+
+
+```java
+package com.atguigu.factory.factorymethod.pizzastore.order;
+
+import com.atguigu.factory.factorymethod.pizzastore.pizza.*;
+import com.sun.org.apache.bcel.internal.generic.LDC;
+
+
+/**
+ * @author gcq
+ * @Create 2020-09-30
+ */
+public class LDOrderPizza extends OrderPizza{
+
+    @Override
+    Pizza createPizza(String orderType) {
+        Pizza pizza = null;
+        if (orderType.equals("cheese")) {
+            pizza = new LDCheesePizza();
+        } else if (orderType.equals("pepper")) {
+            pizza = new LDPepperPizzza();
+        }
+        return pizza;
+    }
+}
+```
+
+
+
+### 6.3 抽象工厂模式
+
+### 	6.3.1基本介绍
+
+1. 抽象工厂模式:定义了一个**interface用于创建相关或有依赖关系的对象簇**，而无需指明具体的类
+2. 抽象工厂模式可以将简单工厂模式和工厂方法模式进行整合。
+3. 从设计层面看，抽象工厂模式就是对简单工厂模式的改进(或者称为进一 步的抽象)。
+4. 将工厂抽象成**两层**，**AbsFactory(抽象工厂 )**和**具体实现的工厂子类**。程序员可以根据创建对象类型使用对应的工厂子类。这样将单个的简单工厂类变成了工厂簇，更利于代码的维护和扩展。
+5. 类图
+6. ![](/Snipaste_2020-09-30_22-18-43.png)
+
+### 6.3.2 抽象工厂模式应用实例
+
+使用抽象工厂模式来完成披萨项目
+
+```java
+package com.atguigu.factory.absfactory.pizzastore.order;
+
+import com.atguigu.factory.absfactory.pizzastore.pizza.Pizza;
+
+/**
+ * 一个抽象工厂的抽象层(接口)
+ *
+ * @author gcq
+ * @Create 2020-09-30
+ */
+public interface AbsFactory {
+
+    // 让下main的工厂子类来具体实现
+    public Pizza createPizza(String orderType);
+
+}
+```
+
+OrderPizza.java
+
+```java
+package com.atguigu.factory.absfactory.pizzastore.order;
+
+import com.atguigu.factory.absfactory.pizzastore.pizza.Pizza;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+/**
+ * @author gcq
+ * @Create 2020-09-30
+ */
+public class OrderPizza {
+
+    AbsFactory factory;
+
+    public OrderPizza(AbsFactory factory) {
+        setFactory(factory);
+    }
+
+    private void setFactory(AbsFactory absFactory) {
+        Pizza pizza = null;
+        //    用户输入
+        String orderType = "";
+        this.factory = absFactory;
+
+        do {
+            orderType = gettype();
+            // factory 可能是北京的工厂子类，也可能是伦敦的工厂子类
+            pizza = factory.createPizza(orderType);
+            if (pizza != null) {
+                pizza.prepare();
+                pizza.bake();
+                pizza.cut();
+                pizza.box();
+            } else {
+                System.out.println("订购失败");
+                break;
+            }
+        } while (true);
+    }
+    //写一个方法 可以获取客户希望订购的披萨类
+    private String gettype() {
+        try {
+            BufferedReader strin = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("input pizza type:");
+            String str = strin.readLine();
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+}
+```
+
+
+
+### 6.4 工厂模式在 JDK-Calendar 应用的源码分析
+
+1、JDK 中 Calendar 类中，就使用到了简单工厂模式
+
+2、源码+Debug源码+分析
+
+```java
+package com.atguigu.jdk;
+
+import java.util.Calendar;
+
+/**
+ * @author gcq
+ * @Create 2020-09-30
+ */
+public class Factory {
+    public static void main(String[] args) {
+        //  getInstance 是 Calendar的静态方法
+        Calendar instance = Calendar.getInstance();
+        System.out.println("年:" + instance.get(Calendar.YEAR));
+    }
+}
+```
+
+```java
+public static Calendar getInstance()
+{
+    return createCalendar(TimeZone.getDefault(), Locale.getDefault(Locale.Category.FORMAT));
+}
+```
+
+```java
+private static Calendar createCalendar(TimeZone zone,
+                                       Locale aLocale) // 根据TimeZone Local 创建对应的实例
+{
+    CalendarProvider provider =
+        LocaleProviderAdapter.getAdapter(CalendarProvider.class, aLocale)
+                             .getCalendarProvider();
+    if (provider != null) {
+        try {
+            return provider.getInstance(zone, aLocale);
+        } catch (IllegalArgumentException iae) {
+            // fall back to the default instantiation
+        }
+    }
+
+    Calendar cal = null;
+
+    if (aLocale.hasExtensions()) {
+        String caltype = aLocale.getUnicodeLocaleType("ca");
+        if (caltype != null) {
+            switch (caltype) {
+            case "buddhist":
+            cal = new BuddhistCalendar(zone, aLocale);
+                break;
+            case "japanese":
+                cal = new JapaneseImperialCalendar(zone, aLocale);
+                break;
+            case "gregory":
+                cal = new GregorianCalendar(zone, aLocale);
+                break;
+            }
+        }
+    }
+    if (cal == null) {
+        // If no known calendar type is explicitly specified,
+        // perform the traditional way to create a Calendar:
+        // create a BuddhistCalendar for th_TH locale,
+        // a JapaneseImperialCalendar for ja_JP_JP locale, or
+        // a GregorianCalendar for any other locales.
+        // NOTE: The language, country and variant strings are interned.
+        if (aLocale.getLanguage() == "th" && aLocale.getCountry() == "TH") {
+            cal = new BuddhistCalendar(zone, aLocale);
+        } else if (aLocale.getVariant() == "JP" && aLocale.getLanguage() == "ja"
+                   && aLocale.getCountry() == "JP") {
+            cal = new JapaneseImperialCalendar(zone, aLocale);
+        } else {
+            cal = new GregorianCalendar(zone, aLocale);
+        }
+    }
+    return cal;
+}
+```
+
+
+
+# 第 7 章 原型模式
+
+### 7.1 克隆羊问题
+
+现在有一只羊tom,姓名为:tom,年龄为: 1， 颜色为:白色，请编写程序创建和tom羊属性完全相同的10
+只羊。
+
+
+
+7.2 传统方式解决克隆羊问题
+
+1、思路分析(图解)
+
+![](/Snipaste_2020-10-02_16-29-07.png)
+
+2、看老师代码演示
+
+```java
+package com.atguigu.prototype;
+
+/**
+ * @author gcq
+ * @Create 2020-10-02
+ */
+public class Client {
+    public static void main(String[] args) {
+        Sheep sheep = new Sheep("tom", 1, "白色");
+
+        Sheep sheep1 = new Sheep(sheep.getName(), sheep.getAge(), sheep.getColor());
+        Sheep sheep2 = new Sheep(sheep.getName(), sheep.getAge(), sheep.getColor());
+        Sheep sheep3 = new Sheep(sheep.getName(), sheep.getAge(), sheep.getColor());
+        Sheep sheep4 = new Sheep(sheep.getName(), sheep.getAge(), sheep.getColor());
+        Sheep sheep5 = new Sheep(sheep.getName(), sheep.getAge(), sheep.getColor());
+        ///....
+
+        System.out.println(sheep1);
+        System.out.println(sheep2);
+    }
+}
+```
+
+
+
+### 7.3 传统方式的优缺点
+
+1. 有点是比较好理解，简单易操作
+
+2. 在创建新的对象时，总是需要重新获取原始对象的属性，如果创建的对象比较复杂时，效率较低
+
+3. 总是需要重新初始化对象，而不是动态地获得对象运行时的状态，不够灵活
+
+4. 改进的思路分析
+
+   **思路**: Java中Object类是所有类的根类，Object 类提供了一个clone0方法，该方法可以将-一个Java对象复制一份， 但是需要实现clone的Java类必须要实现-一个接口Cloneable,该接口表示该类能够复制且具有复制的能力=>
+
+   **原型模式**
+
+### 7.4 原型模式-基本介绍
+
+1、原型模式(Prototype模式)是指: 用**原型实例指定创建对象的种类**，**并且通过拷贝这些原型，创建新的**对象
+2、 原型模式是一种创建型设计模式，允许一个对象再创建另外一个可定制的对象，无需知道如何创建的细节
+3、工作原理是:通过将一个原型对象传给那个要发动创建的对象，这个要发动创建的对象通过请求原型对象拷贝它们自己来实施创建，**即对象.clone()**
+4、形象的理解:孙大圣拔出猴毛， 变出其它孙大圣
+
+
+
+### 7.5 原型模式原理结构图 uml 类图
+
+![](/Snipaste_2020-10-02_16-32-58.png)
+
+**原型结构图说明**
+
+Prototype:原型类，声明一个克隆自己的接口
+
+ConcretePrototype：具体的原型类，实现一个克隆自己的操作
+
+Cient 让一个原型对象克隆自己，从而创建一个新的对象(属性一样)
+
+
+
+### 7.5 原型模式解决克隆羊问题的应用实例
+
+使用原型模式改进传统方式，让程序具有更高的效率和扩展性
+
+代码实现
+
+```java
+![Snipaste_2020-10-02_16-38-31](/Snipaste_2020-10-02_16-38-31.png)package com.atguigu.prototype.improve;
+
+/**
+ * @author gcq
+ * @Create 2020-10-02
+ */
+
+public class Sheep implements Cloneable {
+
+    private String name;
+    private int age;
+    private String color;
+    public Sheep firend; // 是对象 克隆是会如何处理，默认是浅拷贝
+
+    public Sheep(String name, int age, String color) {
+        this.name = name;
+        this.age = age;
+        this.color = color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return "Sheep{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", color='" + color + '\'' +
+                '}';
+    }
+
+    @Override
+    protected  Object clone()  {
+        Sheep sheep = null;
+        try {
+            sheep = (Sheep) super.clone();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sheep;
+    }
+}
+```
+
+```java
+package com.atguigu.prototype.improve;
+
+/**
+ * @author gcq
+ * @Create 2020-10-02
+ */
+public class Client {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        System.out.println("原型模式完成对象创建");
+        Sheep sheep = new Sheep("tom",1,"白色");
+        Sheep sheep1 = (Sheep) sheep.clone(); // 克隆
+        Sheep sheep2 = (Sheep) sheep.clone();
+        Sheep sheep3 = (Sheep) sheep.clone();
+        Sheep sheep4 = (Sheep) sheep.clone();
+
+        System.out.println("sheep2=" + sheep2);
+
+    }
+}
+```
+
+###  
+
+### 7.7 原型模式在 Spring 框架中源码分析
+
+Spring 中原型 bean 的创建 ，就是原型模式的应用
+
+代码分析+Debug源码
+
+![](/Snipaste_2020-10-02_16-38-31.png)
+
+
+
+### 7.8 深入讨论-浅拷贝和深拷贝
+
+### 	7.9.1浅拷贝的介绍
+
+1. 对于数据类型是基本数据类型的成员变量，浅拷贝会直接进行值传递，也就是将.
+   该属性值复制一-份给新的对象。
+
+2. 对于数据类型是引用数据类型的成员变量，比如说成员变量是某个数组、某个类的对象等，那么浅拷贝会进行引用传递，也就是只是将该成员变量的引用值(内存地址)复制一份给新的对象。因为实际上两个对象的该成员变量都指向同一个.
+   实例。在这种情况下，在一个对象中修改该成员变量会影响到另一个对象的该成员变量值
+
+3. 前面我们克隆羊就是浅拷贝
+
+4. 浅拷贝是使用默认的clone()方法来实现
+
+   **sheep = (Sheep) super.clone();**
+
+
+
+### 7.8.2 深拷贝基本介绍
+
+1. 复制对象的所有基本数据类型的成员变量值
+2. 为所有引用数据类型的成员变量申请存储空间，并复制每个引用数据类型成员变量所引用的对象，直到该对象可达的所有对象。也就是说，**对象进行深拷贝要对整个对象进行拷贝(包括对象的引用类型进行拷贝)**
+3. 深拷贝实现方式1:重写**clone**方法来实现深拷贝
+4. 深拷贝实现方式2:通过**对象序列化实现深拷贝(推荐)**。
+
+
+
+### 7.9 深拷贝应用分析
+
+1. 使用重写 clone方法 实现深拷贝
+2. 使用序列化实现深拷贝
+3. 代码演示
+
+
+
+```java
+package com.atguigu.prototype.deepclone;
+
+import java.io.Serializable;
+
+/**
+ * @author gcq
+ * @Create 2020-10-02
+ */
+public class DeepCloneableTarget implements Serializable,Cloneable {
+
+    private static final long serialVersionUID = 1L;
+
+    private String cloneName;
+
+    private String cloneClass;
+
+
+    public DeepCloneableTarget(String cloneName, String cloneClass) {
+        this.cloneName = cloneName;
+        this.cloneClass = cloneClass;
+    }
+
+    // 该类属性都是String 默认clone方法 浅拷贝
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+```
+
+
+
+```java
+package com.atguigu.prototype.deepclone;
+
+import java.io.*;
+
+/**
+ * @author gcq
+ * @Create 2020-10-02
+ */
+public class DeepProtoType implements Serializable,Cloneable {
+
+    public String name;
+    public DeepCloneableTarget deepCloneableTarget;
+
+    public DeepProtoType() {
+        super();
+    }
+    //深拷贝-- method1 使用clone方法
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Object deep = null;
+        // 这是完成对基本数据类型(属性)和String的克隆
+        deep = super.clone();
+        //对引用类型的属性,进行单独处理
+        DeepProtoType deepProtoType = (DeepProtoType)deep;
+        deepProtoType.deepCloneableTarget = (DeepCloneableTarget) deepCloneableTarget.clone();
+
+        return deepProtoType;
+    }
+
+    // 深拷贝 method2 通过对象序列化实现(推荐)
+    public Object deepClone() {
+
+        // 创建流对象
+        ByteArrayOutputStream bos = null;
+        ObjectOutputStream oos = null;
+        ByteArrayInputStream bis = null;
+        ObjectInputStream ois = null;
+
+        try {
+            // 序列化
+            bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            // 当前这个对象以对象流的方式输出
+            oos.writeObject(this);
+
+            // 反序列化
+            bis = new ByteArrayInputStream(bos.toByteArray());
+            ois = new ObjectInputStream(bis);
+            DeepProtoType copyObj = (DeepProtoType) ois.readObject();
+
+            return copyObj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                bos.close();
+                oos.close();
+                bis.close();
+                ois.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+
+
+```java
+package com.atguigu.prototype.deepclone;
+
+/**
+ * @author gcq
+ * @Create 2020-10-02
+ */
+public class Client {
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        DeepProtoType p = new DeepProtoType();
+        p.name = "宋江";
+        p.deepCloneableTarget = new DeepCloneableTarget("大牛","大牛的类");
+
+        // 方式1 完成深拷贝
+//        DeepProtoType p2 = (DeepProtoType) p.clone();
+//        System.out.println("p.name=" + p.name + "p.deepCloneableTraget=" + p.deepCloneableTarget.hashCode());
+//        System.out.println("p2.name=" + p2.name + "p2.deepCloneableTraget=" + p2.deepCloneableTarget.hashCode());
+
+        // 方式2 完成深拷贝
+        DeepProtoType p2 = (DeepProtoType) p.deepClone();
+        System.out.println("p.name=" + p.name + "p.deepCloneableTraget=" + p.deepCloneableTarget.hashCode());
+        System.out.println("p2.name=" + p2.name + "p2.deepCloneableTraget=" + p2.deepCloneableTarget.hashCode());
+
+
+    }
+}
+```
+
+### 7.10 原型模式的注意事项和细节
+
+1. 创建新的对象比较复杂时，可以利用原型模式**简化对象的创建过程，同时也能够提高**效率
+2. 不用重新初始化对象，而是动态地获得对象运行时的状态
+3. 如果原始对象发生变化(增加或者减少属性)，其它克隆对象的也会发生相应的变化，无需修改代码
+4. 在实现深克隆的时候可能需要比较复杂的代码
+5. **缺点**:需要为每一个类配备一个克隆方法，这对全新的类来说不是很难，但对已有
+6. 的类进行改造时，需要修改其源代码，违背了ocp原则，这点请同学们注意.
