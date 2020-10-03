@@ -4,7 +4,7 @@ typora-root-url: image
 
 # Docker基础篇之快速上手
 
-# 1、Docker简介
+# 第一章 Docker简介
 
 ### 是什么？
 
@@ -116,4 +116,948 @@ Docker的主要目标是“**Build, Ship[ and Run Any App,Anywhere**"，也就�
 ![](/Snipaste_2020-10-02_18-31-11.png)
 
 
+
+#### 去哪下
+
+##### 1、官网
+
+docker官网： https://www.docker.com/
+
+docker中文网站: https://www.docker-cn.com/
+
+##### 2、仓库
+
+Docker Hub官网：https://hub.docker.com/
+
+ 
+
+# 第二章 Docker安装
+
+### 前提说明
+
+**CentOS Docker安装**
+Docker支持以下的CentOS版本:
+CentOS 7 (64-bit)
+CentOS 6.5 (64-bit)或更高的版本
+
+**前提条件**
+目前，CentOS 仅发行版本中的内核支持Docker。
+Docker运行在CentOS 7.上，要求系统为64位、系统内核版本为3.10以上。
+Docker运行在CentOS-6.5或更高的版本的CentOS上，要求系统为64位、系**统内核版本为2.6.32-431或者更高版本。**
+
+![](/Snipaste_2020-10-02_18-46-16.png)
+
+
+
+### Docker 的基本组成
+
+#### docker架构图
+
+![](/architecture.svg)
+
+
+
+#### 镜像( image )
+
+Docker镜像(lmage)就是-一个只读的模板。镜像可以用来创建Docker容器，个镜像可以创建很多容器
+
+![](/Snipaste_2020-10-02_19-39-12.png)
+
+#### 容器( container)
+
+Docker利用容器(Container) 独立运行的一个或一组应用。**容器是用镜像创建的运行实例。**
+它可以被启动、开始、停止、删除。每个容器都是相互隔离的、保证安全的平台。
+**可以把容器看做是一个简 易版的Linux环境**(包括root用户权限、进程空间、用户空间和网络空间等)和运行在其中的应用程序。
+容器的定义和镜像几乎一模一样，也是一堆层的统一视角， 唯- -区别在于容器的最上面那-层是可读可写的。
+
+#### 仓库( repository)
+
+仓库(**Repository**) 是**集中存放镜像**文件的场所。
+仓库(**Repository**)和仓库注册服务器(**Registry**) 是有区别的。仓库注册服务器上往往存放着多个仓库，每个仓库中又包含了多镜像，
+每个镜像有不同的标签(tag) 。
+
+仓库分为公开仓库(**Public**) 和私有仓库(**Private**) 两种形式。
+**最大的公开仓库是Docker Hub(ttps://hub. docker.com/)**
+存放了数量庞大的镜像供用户下载。国内的公开仓库包括阿里云、网易云等
+
+#### 小总结 ()
+
+需要正确的理解仓储/镜像/容器这几个概念:
+
+Docker本身是一个容器运行载体或称之为管理引擎。我们把应用程序和配置依赖打包好形成一-个可交付的运行环境，这个打好的运行环境就似乎image镜像文件。只有通过这个镜像文件才能生成Docker容器。image文件可以看作是容器的模板。Docker根据image文件生成容器的实例。同一个image文件，可以生成多个同时运行的容器实例。
+
+image文件生成的容器实例，本身也是一一个文件，称为镜像文件。
+
+一个容器运行一种服务，当我们需要的时候，就可以通过docker客户端创建一-个对应的运行实例，也就是我们的容器至于仓储，就是放了一堆镜像的地方，我们可以把镜像发布到仓储中，需要的时候从仓储中拉下来就可以了。|
+
+
+
+### 安装步骤
+
+#### Centos6.8安装Docker
+
+1、yum install -y epel-release
+
+![](/Snipaste_2020-10-02_19-48-53.png)
+
+2、yum install -y docker-io
+
+![](/Snipaste_2020-10-02_19-49-37.png)
+
+3、安装后的配置文件： etc/sysconfig/docker
+
+![](/Snipaste_2020-10-02_19-50-17.png)
+
+4、启动 Docker后台服务: service docker start
+
+5、docker version 验证
+
+
+
+#### Centos7.0安装Docker
+
+https://docs.docker.com/engine/install/centos/
+
+
+
+### 永远的helloworld
+
+#### 阿里云镜像加速
+
+是什么
+
+​	https://promotion.aliyun.com/ntms/act/kubernetes.html
+
+注册一个属于自己的阿里云账户( 可复用淘宝账号)
+
+获得加速器地址连接
+
+​	登录阿里云开发者平台
+
+​	获取加速器地址
+
+配置本机Docker运行镜像加速器
+
+​	鉴于国内网络问题，后续拉取Docker镜像十分缓慢，我们可以需要配置加速器来解决，
+我使用的是阿里云的本人自己账号的镜像地址(需要自己注册有一个属于你自己的): ht:po/. mirror aliyuncns .com
+
+* vim /etc/sysconfig/docker
+将获得的自己账户下的阿里云加速地址配置进
+other_ args-="--registry-mirror=https://你自 己的账号加速信息.mirror .aliyuncs.com
+
+![](/Snipaste_2020-10-02_20-19-10.png)
+
+重新启动 Docker 后台服务：service docker restart
+
+Linux系统下配置完加速器需要检查是否生效
+
+
+
+#### 网易云加速
+
+基本上同上述阿里云
+
+启动Docker后台容器(测试运行 hello-world )
+
+​	docker run hello world
+
+![](/Snipaste_2020-10-03_10-54-57.png)
+
+
+
+run干了什么
+
+![](/Snipaste_2020-10-03_10-55-24.png)
+
+
+
+### 底层原理
+
+#### Docker是怎样工作的
+
+Docker是一个Client-Server结构的系统，Docker守 护进程运行在主机上，然后通过Socket连 接从客户端访问，守护进程从客户端接受命令并管理运行在主机上的容器。**容器，是一个运行时环境，就是我们前面说到的集装箱。**
+
+![](/Snipaste_2020-10-03_10-58-47.png)
+
+#### 为什么Docker比较比vm快
+
+1、**docker**有着比虚拟机更少的抽象层。由亍docker不需要**Hypervisor**实现硬件资源虚拟化,运行在docker容器上的程序直接使用的都是实际物理机的硬件资源。因此在CPU、内存利用率上docker将会在效率上有明显优势。
+2、**docker**利用的是宿主机的内核,而不需要**Guest OS**。因此,当新建一个 容器时,docker不需要和虚拟机一样 重新加载- - 个操作系统内核仍而避免引寻、加载操作系统内核返个比较费时费资源的过程,当新建--个虚拟机时,虚拟机软件需要加载GuestOS,返个新建过程是分钟级别的。而docker由于直接利用宿主机的操作系统,则省略了返个过程,因此新建一-个docker容器只需要几秒钟。
+
+![](/Snipaste_2020-10-03_11-00-34.png)
+
+
+
+# 第三章 Docker常用命令
+
+### 帮助命令
+
+```shell
+docker Version
+
+docker info
+
+docker --help
+	自己查看官网解释，高手都是自己练出来的，百度上只不过是翻译了下，加了点例子
+```
+
+### 镜像命令
+
+#### docker images 列出本机上的镜像
+
+#### ![](/Snipaste_2020-10-03_11-09-33.png)OPTIONS 说明：
+
+```dockerfile
+-a 列出本地所有的镜像(含中间映射层)
+-q 只显示镜像ID
+--digests 显示镜像的摘要信息
+--no-trunc 显示完整的镜像信息
+```
+
+
+
+#### docker search 某个XXX镜像的名字
+
+​	网站 www.dockerhub.com
+
+​	docker search [OPTIONS] 镜像名字
+
+​	OPTIONS 说明
+
+```dockerfile
+--no-trun 显示完整的镜像描述
+-s 列出收藏数不小于指定值的镜像
+--automated 只列出 automated build类型的镜像
+```
+
+
+
+#### docker pull 某个镜像的名字
+
+​	下载镜像
+
+​	 docker pull 镜像名字[:TAG]
+
+
+
+#### docker rmi 某个XXX镜像的名字ID
+
+​	删除镜像
+
+​	删除单个 docker rm -f 镜像ID
+
+​	删除多个 docker rm -f 镜像名1:TAG 镜像名2:TAG
+
+​	删除多个 docker rmi -f ${docker images -qa}
+
+
+
+### 容器命令
+
+有镜像才能创建容器，这是根本前提(下载一个Centos镜像演示)
+
+​	docker pull centos
+
+#### 新建并启动容器
+
+​	docker run [OPTIONS] IMAGE [COMMAND][ARG]
+
+​	OPTIONS 说明 
+
+```java
+OPTIONS说明(常用) :有些是一个减号，有些是两个减号
+--name="容器新名字":为容器指定一个名称;
+-d:后台运行容器，并返回容器ID， 也即启动守护式容器;
+-i:以交互模式运行容器，通常与-t同时使用;
+-t:为容器重新分配一个伪输入终端，通常与-i同时使用;
+-P:随机端口映射;
+-p:指定端口映射，有以下四种格式
+ip:hostPort:containerPort
+ip::containerPort
+hostPort:containerPort
+containerPort
+
+```
+
+
+
+![](/Snipaste_2020-10-03_11-40-34.png)
+
+
+
+#### 列出当前所有**正在运行**的容器
+
+​	dockers ps [OPTIONS]
+
+```JAVA
+OPTIONS说明(常用) :
+-a :列出当前所有正在运行的容器+历史上运行过的
+-|:显示最近创建的容器。
+-n:显示最近n个创建的容器。
+-q :静默模式，只显示容器编号。
+--no-trunc :不截断输出。
+
+```
+
+
+
+#### 退出容器
+
+两种退出方式
+
+​	exit 容器停止退出
+
+​	ctrl+P+Q 容器不停止退出
+
+#### 启动容器
+
+docker start 容器ID或容器签名
+
+#### 重启容器
+
+docker restart 容器ID或容器签名
+
+#### 停止容器
+
+docker stop 容器ID或容器签名
+
+#### 强制停止容器
+
+docker kill 容器ID或容器签名
+
+#### 删除已停止的容器
+
+docker rm 容器ID  -f
+
+​	一次性删除多个容器
+
+​	docker rm -f $(docker ps -a -q)
+
+​	docker ps -a -q | xargs docker rm
+
+
+
+### 重要
+
+#### 启动守护式容器
+
+#使用镜像centos:latest以后台模式启动一个容器
+docker run -d centos
+
+问题:然后docker ps -a进行查看,**会发现容器已经退出**
+很重要的要说明的一点: **Docker容器后台运行,就必须有一个前台进程.**
+容器运行的命令如果不是那些**一直挂起的命令** (比如运行top，tail) ，就是会自动退出的。
+这个是**docker**的机制问题,比如你的web容器，我们以**nginx**为例，正常情况下,我们配置启动服务只需要启动响应的**service**即可。例如
+service nginx start
+但是,这样做,**nginx**为后台进程模式运行,就导致**docker**前台没有运行的应用,这样的容器后台启动后，会立即自杀因为他觉得他没事可做了.所以，最佳的解决方案是将你要运行的程序以前台进程的形式运行
+
+
+
+#### 查看容器日志
+
+docker logs -f -t --tail 容器ID 
+
+​	-t 是加入时间戳
+
+​	-f 跟随最新的日志打印
+
+​	--tail 数字显示最后多少条
+
+
+
+#### 查看容器内的进程
+
+docker top 容器ID
+
+#### 查看容器内部细节
+
+docker inspect 容器ID
+
+#### 进入正在运行的容器并以命令行交互
+
+docker exec -it 容器ID bashShell
+
+![](/Snipaste_2020-10-03_13-23-17.png)
+
+重新进入docker attach 容器ID
+
+上述两个区别
+
+attach 直接进入容器启动命令的终端，不会启动新的进程
+
+exec 实在容器中打开新的终端，并且可以穷的那个新的进程
+
+
+
+#### 从容器内拷贝文件到主机上
+
+docker cp 容器ID:容器内路径 目的主机路径
+
+![](/Snipaste_2020-10-03_13-26-40.png)
+
+
+
+### 小总结
+
+![](/Snipaste_2020-10-03_13-30-12.png)
+
+![](/20201003133051.png)
+
+
+
+# 第 四 章 Docker 镜像
+
+## 是什么
+
+镜像是一种轻量级、可执行的独立软件包，用来打包软件运行环境和基于运行环境开发的软件，它包含运行某个软件所需的有内容，包括代码、运行时、库、环境变量和配置文件。
+
+### UnionFS(联合文件系统)
+
+UnionFS (状节又件示统)
+UnionFS (联合文件系统) : Union文件系统(UnionFS)是一一种分层、轻量级并且高性能的文件系统，它支持对文件系统的修作为一 次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下(unite several directories into a singlevirtualfilesystem)。Union文件系统是Docker镜像的基础。镜像可以通过分层来进行继承，基于基础镜像(没有父镜像)可以制作各种具.体的应用镜像。
+
+特性:一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文
+件系统会包含所有底层的文件和目录
+
+
+
+### Docker镜像加载原理
+
+**Docker镜像加载原理:**
+	**docker**的镜像实际上由一层一层的文件系统组成，这种层级的文件系统**UnionFS。**
+
+**botfs(boot file system)**主要包含**bootloader**和**kernel**, **bootloader**主 要是引导加载**kernel**, **Linux**刚启动时会加载bootfs文件系统，在**Docker**镜像的最底层是**bootfs**。这一-层与我们典型的**Linux/Unix**系统是- - -样的，包含boot加载器和内核。当boot加载完成之 后整个内核就都在内存中了，此时内存的使用权己由bootfs转交给内核，此时系统也会卸载bootfs。
+
+**rootfs (root file system)，**在**bootfs**之 上。 包含的就是典型Linux系统中的**/dev, /proc, /bin, /etc**等标准目录和文件。**rootfs**就 是各种不同的操作系统发行版，比如**Ubuntu**，**Centos**等等。
+
+![](/Snipaste_2020-10-03_13-38-28.png)
+
+平时我们安装的虚拟机的Centos都是好几个G ，为什么docker这里才要200m
+
+![](/QQ截图20201003133908.png)
+
+对于一个精简的**OS, rootfs**可 以很小，只需要包括最基本的命令、工具和程序库就可以了，因为底层直接用**Host**的**kernel**,自只需要提供rootfs就行了。由此可见对于不同的**linux**发行版, **bootfs**基本是一致的, **rootfs**会有差别，因此不同的发行版可以公用**bootfs**。
+
+### 分层的镜像
+
+![](/Snipaste_2020-10-03_13-40-06.png)
+
+### 分层的镜像
+
+![](/Snipaste_2020-10-03_14-02-22.png)
+
+
+
+### 为什么 Docker纪念馆想要采用这种分层结构
+
+最大的一个好处就是-**共享资源**
+比如:**有多个镜像都从相同的base镜像构建而来**，那么宿主机只需在磁盘上保存一份**base**镜像,
+同时内存中也只需加载一份**base**镜像，就可以为所有容器服务了。而且镜像的每一层都可以被共享。
+
+
+
+## 特点
+
+Docker镜像都是只读的，当容器启动时，一个新的可写层被加载到**镜像的顶部**，这一层通常被称为**容器层**，容器层之下都叫**镜像层**
+
+
+
+## Docker镜像Commit操作
+
+docker commit 提交容器副本使之称为一个新的镜像
+
+docker commit -m="提交的描述信息" -a="作者" 容器ID 要创建的目标镜像名:[标签名]
+
+#### 案例演示：
+
+1、从Hub上下载tomcat镜像到本地并成功运行
+
+![](/Snipaste_2020-10-03_14-26-27.png)
+
+
+
+docker run -d -p 8080:8080 tomcat
+
+```java
+-p主机端口：docker容器端口
+-P:随机分配端口
+i:交互
+t:终端
+```
+
+
+
+2、故意删除上一步镜像生产tomcat容器的文档
+
+![](/Snipaste_2020-10-03_14-28-22.png)
+
+
+
+3、也即当前的tomcat运行实例是一个没有文档内容的容器，以他为模板commit一个没有doc的tomcat新镜像 atguigu/tomcat02
+
+![](/Snipaste_2020-10-03_14-29-38.png)
+
+
+
+4、启动我们的新镜像并和原来的对比
+
+​	启动atuigu/tomcat02 没有doc
+
+​	启动原来tomcat他有doc
+
+
+
+# 第 五 章 Docker容器数据卷
+
+## 是什么
+
+先来看看**Docker**的理念:
+*将运用与运行的环境打包形成容器运行，运行可以伴随着容器，但是我们对数据的要求希望是持久化的
+*容器之间希望有可能共享数据
+**Docker**容器产生的数据，如果不通过**docker** **commit**生成新的镜像，使得数据做为镜像的一部分保存下来，
+那么当容器删除后，数据自然也就没有了。
+为了能保存数据在docker中我们使用卷。|
+
+一句话：有点类似我们Redis里面的rdb和aof文件
+
+## 能干嘛
+
+卷就是目录或文件，存在于一个或多个容器中，由**docker**挂载到容器，但不属于联合文件系统，因此能够绕过Union FileSystem提供一些用 于持续存储或共享数据的特性:
+卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不 会在容器删除时删除其挂载的数据卷
+
+特点:
+1:数据卷可在容器之间共享或重用数据
+2:卷中的更改可以直接生效
+3:数据卷中的更改不会包含在镜像的更新中
+4:数据卷的生命周期一直持续到没有容器使用它为止
+
+**容器的持久化**
+
+**容器间继承+共享数据**
+
+## 数据卷
+
+### 容器内添加
+
+#### 	直接命令添加
+
+![](/Snipaste_2020-10-03_15-30-44.png)
+
+
+
+docker run -it -v /宿主机绝对路径目录:/容器内目录 镜像名
+
+查看数据卷是否挂载成功
+
+![](/Snipaste_2020-10-03_15-31-52.png)
+
+容器和宿主机之间数据共享
+
+![](/Snipaste_2020-10-03_15-32-19.png)
+
+容器停止退出后，主机修改后的数据是否同步
+
+![](/Snipaste_2020-10-03_15-33-03.png)
+
+命令(带权限)
+
+​	docker run -it -v /宿主机绝对路径目录:/容器内目录**:ro** 镜像名
+
+![](/Snipaste_2020-10-03_15-33-49.png)
+
+
+
+#### DockerFile添加
+
+根目录下新建mydocker文件夹并进入
+
+可在Dockerfile中使用VOLUME指令来给镜像添加一个或多个数据卷
+
+![](/Snipaste_2020-10-03_15-35-17.png)
+
+
+
+File构建
+
+![](/Snipaste_2020-10-03_15-35-37.png)
+
+build后生成镜像
+
+![](/Snipaste_2020-10-03_15-36-01.png)
+
+获得一个新镜像zzyy/centos
+
+run容器
+
+![](/Snipaste_2020-10-03_15-36-31.png)
+
+通过上述步骤，容器内的卷目录地址已经知道，对应的主机目录在哪
+
+![](/Snipaste_2020-10-03_15-37-05.png)
+
+**主机对应默认地址**
+
+![](/Snipaste_2020-10-03_15-37-22.png)
+
+备注
+
+Docker挂载主机目录Docker访问出现cannot open directory . Permission denied
+解决办法:在挂载目录后多加一个--privileged=true参数即可
+
+## 数据卷容器
+
+### 是什么
+
+命名的容器挂载数据卷，其它容器通过挂载这个(父容器)实现数据共享，挂载数据卷的容器，称之为数据卷容器.
+
+### 总体介绍
+
+以上一步新建的zzyy/centos为模板并运行容器 doc1/doc2/doc3
+
+他们已经具有容器卷
+
+​	/dataVolumeContainer1
+
+​	/dataVolumeContainer2
+
+### 容器间传递共享(--volumes -from)
+
+#### 先启动一个父容器doc1
+
+![](/Snipaste_2020-10-03_15-40-46.png)
+
+启动后在 dataVolumeContainer1中新增内容
+
+#### doc2/doc3 继承doc1 
+
+​	**--volumes -from**
+
+![](/Snipaste_2020-10-03_15-41-51.png)
+
+doc2/doc3 分别在dataVolumeContainer2各自新增内容
+
+#### 回到doc1可以看到02/03各自添加的都能共享了
+
+![](/Snipaste_2020-10-03_15-42-46.png)
+
+#### 删除doc1 doc2修改后doc3是否可以访问
+
+![](/Snipaste_2020-10-03_15-43-31.png)
+
+#### 删除doc02后doc3是否访问
+
+![](/Snipaste_2020-10-03_15-43-57.png)
+
+在进一步
+
+![](/Snipaste_2020-10-03_15-44-11.png)
+
+#### 新建doc04继承doc03 然后删除doc03
+
+![](/Snipaste_2020-10-03_15-44-56.png)
+
+
+
+**结论：容器之间配置信息的传递，数据卷的生命周期一直持续到没有容器使用它为止**
+
+
+
+
+
+# 第 六 章 DockerFile解析
+
+## 是什么
+
+### Dockerfile是用来构建Docker镜像的构建文件，由一系列命令和参数构成的脚本
+
+### 构建三步骤
+
+​	编写Dockerfile文件
+
+​	docker build
+
+​	docker run
+
+### 文件什么样？？？
+
+​	熟悉的Centos为例
+
+http://hub.docker.com/_/centos
+
+![](/Snipaste_2020-10-03_17-32-12.png)
+
+## DockerFile构建过程解析
+
+Dockerfile内容基础知识
+
+1、每条保留字指令都必须为大写字母且后面要跟随至少一个参数
+2、 指令按照从.上到下，顺序执行
+3、#表示注释
+4、每条指令都会创建一个新的镜像层，并对镜像进行提交
+
+### Docker执行Dockerfile的大致流程
+
+1、 docker 从基础镜像运行一个容器
+2、执行一-条指令并对容器作出修改
+3、执行类似docker commit的操作提交- -个新的镜像层
+4、docker再基 于刚提交的镜像运行一一个新容器
+5、执行dockerfile中的 下一条指令直到所有指令都执行完成
+
+### 小总结
+
+从应用软件的角度来看，Dockerfile、 Docker镜像与Docker容器分别代表软件的三个不同阶段，
+Dockerfile是软件的原材料
+Docker镜像是软件的交付品
+Docker容器则可以认为是软件的运行态。
+Dockerfile面向开发，Docker镜 像成为交付标准，Docker容 器则涉及部署与运维，三者缺- -不可，合力充当Docker体系的基石。
+
+![](/Snipaste_2020-10-03_17-35-08.png)
+
+1、Dockerfile，需要定义一个Dockerfile，Dockerfile定 义了进程需要的一切东西。Dockerfile涉 及的内容包括执行代码或者是文件、环境变量、依赖包、运行时环境、动态链接库、操作系统的发行版、服务进程和内核进程(当应用进程需要和系统服务和内核进程打交道，这时需要考虑如何设计namespace的权限控制)等等;
+2、Docker镜像，在用Dockerfile定义一文件之后，docker build时会产生- -个Docker镜像，当运行Docker镜像时，会真正开始提供服务;
+3、Docker容器，容器是直接提供服务的。
+
+
+
+## DockerFile体系结构(保留字指令)
+
+<img src="/Snipaste_2020-10-03_17-47-26.png" style="zoom:200%;" />
+
+![](/Snipaste_2020-10-03_17-47-58.png)
+
+小总结
+
+![](/Snipaste_2020-10-03_17-48-16.png)
+
+## 案例
+
+### Base 镜像(scratch) 
+
+Docker Hub中 99%的镜像都是通过在base镜像中安装和配置需要的软件构建出来的
+
+![](/Snipaste_2020-10-03_17-52-43.png)
+
+### 自定义镜像mycentos
+
+#### 1、编写
+
+​	Hub默认Centos镜像是什么情况
+
+![](/Snipaste_2020-10-03_17-53-44.png)
+
+准备Dockerfile文件
+
+myCentOS内容Dockerfile
+
+![](/Snipaste_2020-10-03_17-54-40.png)
+
+```shell
+FROM centos
+MAINTAINER ZZYY<zzyy167@126.com>
+
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+
+RUN yum -y install vim
+RUN yum -y install net-tools
+
+EXPOSE 80
+
+CMD echo $MYPATH
+CMD echo "success--------------ok"
+CMD /bin/bash
+```
+
+#### 2、构建
+
+docker build -t 新镜像名字:TAG .
+
+![](/Snipaste_2020-10-03_17-56-15.png)
+
+#### 3、运行
+
+docker run -it 新镜像名字:TAG 
+
+![](/Snipaste_2020-10-03_17-57-09.png)
+
+#### 4、列出镜像的变更历史
+
+docker history 镜像名
+
+
+
+CMD/ENTRYPOINT 镜像案例
+
+都是指定一个容器启动时要运行的命令
+
+### CMD
+
+​	Dockerfile中可以有多个CMD指令，但只有最后一个生效，CMD会被dockerrun之后的参数替换
+
+​	Case
+
+​	tomcat的讲解演示 docker run -it -p 8080:8080 tomcat ls -l
+
+##### ENTRYPOINT 
+
+​	docker run 之后的参数会被当做参数传递给 ENTRYPOINT 之后形成新的命令组合
+
+​	Case 
+
+![](/Snipaste_2020-10-03_18-02-41.png)
+
+制作CMD版可以查询IP信息的容器
+
+![](/Snipaste_2020-10-03_18-03-11.png)
+
+##### curl的命令解释
+
+**curl**命令可以用来执行下载、发送各种**HTTP**请求，指定**HTTP**头部等操作。
+
+如果系统没有**curl**可以使用**yum install curl**安装，也可以下载安装。
+**curl是将下载文件输出到stdout**
+使用命令: curl http://www .baidu.com
+执行后，www.baidu.com的html就会显示在屏幕上了
+
+这是最简单的使用方法。用这个命令获得了htp://curl.haxx.se指向的页面，同样，如果这里的URL指向的是--个文件或者一幅图都可以直接下载到本地。如果下载的是HTML文档，那么缺省的将只显示文件头部，即HTML文档的header。要全部显示，请加参数-i
+
+WHY
+
+我们可以看到可执行文件找不到的报错，**executable file not found。**
+之前我们说过，**跟在镜像名后面的是command,运行时会替换CMD的默认值。**
+因此这里的-i替换了原来的CMD，而不是添加在原来的curl -s htp://ip.cn后面。而-i 根本不是命令，所以自然找不到。
+那么如果我们希望加入-i这参数，我们就必须重新完整的输入这个命令:
+**$ docker run myip curl -s http://ip.cn -i**
+
+![](/Snipaste_2020-10-03_18-05-28.png)
+
+### 自定义镜像Tomcat
+
+##### 1、mkdir -p /zzyy/mydockerfile/tomcat9
+
+##### 2、在上述目录下 touch c.txt
+
+##### 3、将jdk和tomcat安装的压缩包拷贝进上一步目录 
+
+##### 4、在zzyyuse/mydockerfile/tomcat9目录下新建Dockerfile文件
+
+```dockerfile
+FROM centos
+MAINTAINER zzyy<zzyybs@ 126.com>
+#把宿主机当前上下文的c .txt拷贝到容器/usr/local/路径下
+COPY c.txt /usr/local/cincontainer.txt
+#把java与tomcat添加到容器中
+ADD jdk-8u171-linux x64.tar .gz /usr/local/
+ADD apache-tomcat-9.0.8.tar.gz /usr/ocal/
+#安装vim编辑器
+RUN yum -y install vim
+#设置工 作访问时候的WORKDIR路径， 登录落脚点
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+#配:置java与tomcat环境变量
+ENV JAVA_ HOME /usr/localjdk1 .8.0_ 171
+ENV CLASSPATH $JAVA_ HOME/lib/dt.jar:$JAVA_ HOME/lib/tools.jar
+ENV CATALINA_ HOME /usr/local/apache-tomcat-9.0.8
+ENV CATALINA_ BASE /usr/ocal/apache-tomcat-9.0.8
+ENV PATH $PATH:$JAVA_ HOME/bin:$CATALINA_ HOME/ib:$CATALINA_ HOME/bin
+#容器运行时监听的端口
+EXPOSE 8080
+#启动时运行tomcat
+# ENTRYPOINT ["/usrl/local/apache-tomcat-9.0.8/bin/startup.sh" ]
+# CMD ["/usr/local/apache-tomcat-9.0.8/bin/catalina.sh","run"]
+CMD /usr/local/apache-tomcat-9.0.8/bin/startup.sh && tail -F /usr/local/apache-tomcat-9.0.8/in/logs/catalina.out
+```
+
+目录内容
+
+![](/Snipaste_2020-10-03_18-12-29.png)
+
+##### 5、构建
+
+![](/Snipaste_2020-10-03_18-12-48.png)
+
+构建完成
+
+![](/Snipaste_2020-10-03_18-13-20.png)
+
+##### 6、run
+
+```dockerfile
+docker run -d -p 9080:8080 -name myt9
+ -v /zyuse/mydockerfiletomcat9/test:/usrlocal/apache-tomcat9.0.8/webapps/test
+ -v /zzyyuse/mydockerfile/tomcat9/tomcat9logs/:/usrlocal/apache-tomcat-9.0.8/logs -privileged=true zzyytomcat9
+```
+
+![](/Snipaste_2020-10-03_18-14-42.png)
+
+备注
+
+Docker挂载主机目录Docker访问出现cannot open directory : Permission denied解决办法:在挂载目录后多加一个--privileged=true参数即可
+
+##### 7、验证
+
+![](/Snipaste_2020-10-03_18-58-14.png)
+
+##### 8、综合前 述容器卷测试的web服务test发布
+
+![](/Snipaste_2020-10-03_18-58-56.png)
+
+web.xml
+
+```xml
+<?xml version="1 .0" encoding="UTF-8"?>
+<web-app xmIns:xsi="http://www.w3.org/2001/XML Schema-instance"
+xmIns="http://java sun.com/xm/ns/javaee"
+xsi:schemaL ocation="http://java. sun.com/xml/ns/javaee htp:/:/java. sun.com/xml/ns/javaee/web-app_ 2_ _5.xsd"
+id="WebApp_ ID" version="2.5">
+<display-name>test</display-name>
+
+</web-app>
+```
+
+a.jsp
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC“//W3C//DTD HTML 4.01 Transitional//EN" http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here </title>
+</head>
+<body>
+welcome-
+<%="i am in docker tomcat self "%>
+<br>
+<br>
+<% System.out,.printIn("==========docker tomcat self");%>
+</body>
+</htmI>
+```
+
+测试
+
+```html
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC“//W3C//DTD HTML 4.01 Transitional//EN" http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here </title>
+</head>
+<body>
+welcome-
+<%="i am in docker tomcat self "%>
+<br>
+<br>
+<% System.out,.printIn("==========docker tomcat self");%>
+</body>
+</htmI>
+```
+
+
+
+## 小总结
+
+![](/Snipaste_2020-10-03_19-00-48.png)
 
