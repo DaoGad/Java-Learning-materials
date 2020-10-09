@@ -102,7 +102,21 @@ https://blog.csdn.net/Chad97/article/details/88529647
 
 ### 2.由于您没有合并的文件，因此无法提交。
 
+之前一直写成git add. 错了。
 
+```
+流程：
+	1. 指定当前目录为git仓库，初始化
+	$  git init newrepo
+	2. 开始追踪文件，添加到缓存区暂存区
+	$  git add * (or/梦琪)
+	3. 提交本地仓库
+	$  git commit -m "简介" 指定文件
+	4. 提交远程仓库
+	$  git push
+	5. 拉取远程
+	$  git pull
+```
 
 
 
