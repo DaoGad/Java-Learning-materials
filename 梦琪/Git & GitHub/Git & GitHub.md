@@ -100,7 +100,7 @@ https://blog.csdn.net/liuchunming033/article/details/45368237
 
 https://blog.csdn.net/Chad97/article/details/88529647
 
-### 2.由于您没有合并的文件，因此无法提交。edit java
+### 2.由于您没有合并的文件，因此无法提交。
 
 之前一直写成git add. 错了。
 
@@ -112,13 +112,25 @@ https://blog.csdn.net/Chad97/article/details/88529647
 	$  git add * (or/梦琪)
 	3. 提交本地仓库
 	$  git commit -m "简介" 指定文件
-	4. 提交远程仓库
-	$  git push
-	5. 拉取远程
+	4. 下载远程代码并合并
 	$  git pull
+	5. 上传远程代码并合并
+	$  git push
 ```
 
+#### 注意事项
 
+​	1.正确使用语句 git add . 或者 git add * 或者把*换成具体的路径
+
+​	2.先拉取再提交自己的,先pull再push
+
+​	3.git diff 或者 git status查看冲突(https://blog.csdn.net/weixin_40906761/article/details/102858947)
+
+​	4.第二种方法：
+
+​			https://www.cnblogs.com/zhujiabin/p/10148803.html
+
+​			https://blog.csdn.net/u014022865/article/details/54892326
 
 
 
