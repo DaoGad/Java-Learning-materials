@@ -1946,3 +1946,705 @@ firewall-cmd --permanent --remove-port=123/tcp
 ![](/Snipaste_2020-10-09_14-10-38.png)
 
 #### 16.5.2 严格按照文档执行
+
+
+
+# 第 17 章 大数据定制篇 Shell编程
+
+### 17.1 为什么要学 Shell 编程
+
+1、Linux运维工程师在进行服务器集群管理时，需要编写Shell程序来进行服务器管理。
+
+2、对于JavaEE和Python程序员来说，工作的需要，你的老大会要求你编写- -些Shell脚本进行程序或者是服务器的维护，比如编写--个定时备份数据库的脚本。
+
+3、对于大数据程序员来说，需要编写Shell程序来管理集群。.
+
+### 17.2 Shell 是什么
+
+![](/Snipaste_2020-10-09_19-59-43.png)
+
+Shell是一个命令行解释器,它为用户提供了一个向Linux内核发送请求以便运行程序的界面系统
+级程序，用户可以用Shell来启动、挂起、停止甚至是编写- -些程序.
+
+#### 17.3 Shell 编程快速入门-Shell脚本执行方式
+
+#### 17.3.1 脚本格式要求
+
+1、脚本以#! /bin/bash 开头
+
+2、脚本需要有可执行权限
+
+#### 17.3.2 编写一个 Shell脚本
+
+需求说明
+
+​	创建一个 Shell脚本 输出helloworld
+
+![](/Snipaste_2020-10-09_20-01-46.png)
+
+#### 17.3.3 脚本常用执行方式
+
+方式1(输入脚本的绝对路径或相对路径)
+	1)首先要赋予helloworld.sh脚本的+x权限
+	2)执行脚本
+
+![](/Snipaste_2020-10-09_20-02-21.png)
+
+方式2(sh+脚本) 不推荐
+
+说明 不用赋予脚本+x权限 直接执行即可
+
+![](/Snipaste_2020-10-09_20-03-02.png)
+
+### 17.4 shell的变量
+
+17.4.1 Shell的变量介绍
+
+1) Linux Shell中的变量分为，系统变和用户自定义变量。
+2)系统变量: SHOME、 $PWD、$SHELL、$USER等等
+比如:echo SHOME等等..
+
+![](/Snipaste_2020-10-09_20-03-50.png)
+
+3)显示当前shell所有变量： set
+
+#### 17.4.2 shell变量的定义
+
+●基本语法
+1)定义变量:变量=值
+2)撤销变量: unset 变量
+3)声明静态变量: readonly 变量，注意:不能
+unset
+●快速入门
+案例1:定义变量A
+案例2:撤销变量A
+
+![](/Snipaste_2020-10-09_20-04-42.png)
+
+#### 17.4.3 定义变量的规则
+
+1、变量名称可以由字母、数字和下划线组成，但是不能以数字开头。
+2、等号两侧不能有空格
+3、变量名称一般习惯为大写
+
+#### 17.4.4 将 命令的返回值赋给变量(重点)
+
+1、A='ls-la' 反引号，运行里面的命令，并把结果返回给变量A
+2、A=S(ls-la) 等价于反引号
+
+![](/Snipaste_2020-10-09_20-06-57.png)
+
+### 17.5设置环境变量
+
+#### 17.5.1基本语法
+
+1、export变量名=变量值（功能描述：将shell变量输出为环境变量）
+
+2、source配置文件（功能描述：让修改后的配置信息立即生效）
+
+3、echo$变量名（功能描述：查询环境变量的值）
+
+![](/Snipaste_2020-10-09_20-07-46.png)
+
+#### 17.5.2 快速入门
+
+1)在/etc/profile文件中定义TOMCAT_HOME环境变量
+
+![](/Snipaste_2020-10-09_20-08-12.png)
+
+2)查看环境变量TOMCAT_HOME的值
+
+echo$TOMCAT_HOME
+
+3)在另外一个shell程序中使用TOMCAT_HOME
+
+![](/Snipaste_2020-10-09_20-08-40.png)
+
+注意：在输出TOMCAT_HOME环境变量前，需要让其生效
+
+source/etc/profile
+
+
+
+### 17.6位置参数变量
+
+#### 17.6.1介绍
+
+当我们执行一个shell脚本时，如果希望获取到命令行的参数信息，就可以使用到位置参数变量，比如：./myshell.sh100200,这个就是一个执行shell的命令行，可以在myshell脚本中获取到参数信息
+
+#### 17.6.2基本语法
+
+$n（功能描述：n为数字，$0代表命令本身，$1-$9代表第一到第九个参数，十以上的参数，十以上的参数需要用大括号包含，如${10}）
+
+$*（功能描述：这个变量代表命令行中所有的参数，$*把所有的参数看成一个整体）
+
+$@（功能描述：这个变量也代表命令行中所有的参数，不过$@把每个参数区分对待）
+
+$#（功能描述：这个变量代表命令行中所有参数的个数）
+
+#### 17.6.3位置参数变量应用实例
+
+案例：编写一个shell脚本positionPara.sh，在脚本中获取到命令行的各个参数信息
+
+![](/Snipaste_2020-10-09_20-10-10.png)
+
+![](/Snipaste_2020-10-09_20-10-20.png)
+
+### 17.7预定义变量
+
+#### 17.7.1基本介绍
+
+就是shell设计者事先已经定义好的变量，可以直接在shell脚本中使用
+
+#### 17.7.2基本语法
+
+$$（功能描述：当前进程的进程号（PID））
+
+$!（功能描述：后台运行的最后一个进程的进程号（PID））
+
+$？（功能描述：最后一次执行的命令的返回状态。如果这个变量的值为0，证明上一个命令正确执行；如果这个变量的值为非0（具体是哪个数，由命令自己来决定），则证明上一个命令执行不正确了。）
+
+#### 17.7.3应用实例在一个shell脚本中简单使用一下预定义变量
+
+![](/Snipaste_2020-10-09_20-11-08.png)
+
+### 17.8运算符
+
+#### 17.8.1基本介绍
+
+学习如何在shell中进行各种运算操作。
+
+#### 17.8.2基本语法
+
+1)“$((运算式))”或“$[运算式]”
+
+2)exprm+n注意expr运算符间要有空格
+
+3)exprm-n
+
+4)expr\*,/,%乘，除，取余•
+
+应用实例案例1：计算（2+3）X4的值1)
+
+$((运算式))
+
+![](/Snipaste_2020-10-09_20-13-21.png)
+
+案例2：请求出命令行的两个参数[整数]的和
+
+![](/Snipaste_2020-10-09_20-13-38.png)
+
+
+
+### 17.9条件判断
+
+判断语句
+
+#### 17.9.1•基本语法
+
+（注意condition前后要有空格）
+
+#非空返回true，可使用$?验证（0为true，>1为false）
+
+#### 17.9.2•应用实例
+
+[atguigu]返回true
+
+[]返回false
+
+[condition]&&echoOK||echonotok条件满足，执行后面的语句
+
+#### 17.9.3•常用判断条件
+
+1)两个整数的比较
+
+=字符串比较
+
+-lt小于
+
+-le小于等于
+
+-eq等于
+
+-gt大于
+
+-ge大于等于
+
+17.9.4应用实例
+
+案例1："ok"是否等于"ok"
+
+判断语句：
+
+![](/Snipaste_2020-10-09_20-15-52.png)
+
+案例2：23是否大于等于22
+
+判断语句:
+
+![](/Snipaste_2020-10-09_20-16-12.png)
+
+案例3：/root/install.log目录中的文件是否存在
+
+判断语句
+
+![](/Snipaste_2020-10-09_20-16-35.png)
+
+### 17.10 流程控制
+
+#### 17.10.1if判断
+
+基本语法
+
+if[ 条件判断式 ];then
+
+​	程序
+
+fi
+
+或者
+
+if[ 条件判断式 ]
+
+​	then
+
+程序
+
+elif[ 条件判断式 ]
+
+​	then
+
+​		程序
+
+fi
+
+注意事项：（1）[条件判断式]，中括号和条件判断式之间必须有空格	(2)推荐使用第二种方式
+
+应用实例案例：请编写一个shell程序，如果输入的参数，大于等于60，则输出"及格了"，如果小于60,则输出"不及格"
+
+![](/Snipaste_2020-10-09_20-18-34.png)
+
+#### 17.10.2 case 语句
+
+![](/Snipaste_2020-10-09_20-19-06.png)
+
+;; 
+
+esac
+
+•应用实例案例1：当命令行参数是1时，输出"周一",是2时，就输出"周二"，其它情况输出"other"
+
+![](/Snipaste_2020-10-09_20-19-33.png)
+
+### 17.10.3 for循环 
+
+基本语法1
+
+for 变量 in 值1 值2 值3... 
+
+do
+
+​	程序
+
+done
+
+应用实例
+
+案例1：打印命令行输入的参数【会使用到$*$@】
+
+![](/Snipaste_2020-10-09_20-20-35.png)
+
+•基本语法2
+
+for((初始值;循环控制条件;变量变化))
+
+do
+
+程序
+
+done
+
+应用实例
+
+案例1：从1加到100的值输出显示
+
+![](/Snipaste_2020-10-09_20-21-11.png)
+
+#### 17.10.4while循环
+
+基本语法1
+
+while[条件判断式]
+
+​	do
+
+​		程序
+
+​	done
+
+应用实例
+
+案例1：从命令行输入一个数n，统计从1+..+n的值是多少？
+
+![](/Snipaste_2020-10-09_20-21-59.png)
+
+### 17.11 read 读取控制台输入
+
+#### 17.11.1 基本语法
+
+read(选项)(参数)
+
+选项：
+
+-p：指定读取值时的提示符；
+
+-t：指定读取值时等待的时间（秒），如果没有在指定的时间内输入，就不再等待了。。
+
+参数
+
+变量：指定读取值的变量名
+
+#### 17.11.2应用实例案例
+
+1：读取控制台输入一个num值案例
+
+2：读取控制台输入一个num值，在10秒内输入。
+
+![](/Snipaste_2020-10-09_20-23-11.png)
+
+### 17.12 函数
+
+#### 17.12.1函数介绍
+
+shell编程和其它编程语言一样，有系统函数，也可以自定义函数。系统函数中，我们这里就介绍两个。
+
+#### 17.12.2系统函数
+
+basename基本语法
+
+功能：返回完整路径最后/的部分，常用于获取文件名
+
+basename [pathname] [suffix]
+
+basename [string] [suffix]（功能描述：basename命令会删掉所有的前缀包括最后一个（‘/’）字符，然后将字符串显示出来。
+
+选项：
+
+suffix为后缀，如果suffix被指定了，basename会将pathname或string中的suffix去掉。
+
+dirname基本语法
+
+功能：返回完整路径最后/的前面的部分，常用于返回路径部分
+
+dirname文件绝对路径（功能描述：从给定的包含绝对路径的文件名中去除文件名（非目录的部分），然后返回剩下的路径（目录的部分））
+
+#### 17.12.3 应用实例
+
+案例1：请返回/home/aaa/test.txt的"test.txt"部分
+
+![](/Snipaste_2020-10-09_20-26-07.png)
+
+#### 17.12.4 自定义函数
+
+基本语法
+
+[function]funname[()]
+
+{
+
+​	Action;
+
+​	[returnint;]
+
+}
+
+调用直接写函数名：
+
+funname[值]
+
+应用实例案例
+
+1：计算输入两个参数的和（read），getSum
+
+![](/Snipaste_2020-10-09_20-27-18.png)
+
+17.13Shell编程综合案例
+
+需求分析
+
+1)每天凌晨2:10备份数据库atguiguDB到/data/backup/db
+
+2)备份开始和备份结束能够给出相应的提示信息
+
+3)备份后的文件要求以备份时间为文件名，并打包成.tar.gz的形式，比如：
+
+2018-03-12_230201.tar.gz
+
+4)在备份的同时，检查是否有10天前备份的数据库文件，如果有就将其删除。
+
+编写一个shell脚本。思路分析
+
+![](/Snipaste_2020-10-09_20-27-59.png)
+
+代码实现
+
+```sh
+#!/bin/bash
+
+#完成数据库的定时备份。
+#备份的路径
+BACKUP=/data/backup/db
+#当前的时间作为文件名
+DATETIME=$(date +%Y_%m_%d_%H%M%S)
+#可以输出变量调试
+#echo ${DATETIME}
+
+echo "=======开始备份========"
+echo "=======备份的路径是 $BACKUP/$DATETIME.tar.gz"
+
+#主机
+HOST=localhost
+#用户名
+DB_USER=root
+#密码
+DB_PWD=root
+#备份数据库名
+DATABASE=atguiguDB
+#创建备份的路径
+#如果备份的路径文件夹存在，就使用，否则就创建
+[ ! -d "$BACKUP/$DATETIME" ] && mkdir -p "$BACKUP/$DATETIME"
+#执行mysql的备份数据库的指令
+mysqldump -u${DB_USER} -p${DB_PWD} --host=$HOST  $DATABASE | gzip > $BACKUP/$DATETIME/$DATETIME.sql.gz
+#打包备份文件
+cd $BACKUP
+tar -zcvf $DATETIME.tar.gz $DATETIME
+#删除临时目录
+rm -rf $BACKUP/$DATETIME
+
+#删除10天前的备份文件
+find $BACKUP -mtime +10 -name "*.tar.gz" -exec rm -rf {} \;
+echo "=====备份文件成功==========="
+
+```
+
+![](/Snipaste_2020-10-09_20-28-42.png)
+
+
+
+# 第 18 章 Python定制篇 开发平台 Ubuntu
+
+18.1Ubuntu的介绍
+
+Ubuntu（友帮拓、优般图、乌班图）是一个以桌面应用为主的开源GNU/Linux操作系统，Ubuntu是GNU/Linux，支持x86、amd64（即x64）和ppc架构，由全球化的专业开发团队（CanonicalLtd）打造的。
+
+专业的Python开发者一般会选择Ubuntu这款Linux系统作为生产平台
+
+.温馨提示：Ubuntu和Centos都是基于GNU/Linux内核的，因此基本使用和Centos是几乎一样的，它们的各种指令可以通用，同学们在学习和使用Ubuntu的过程中，会发现各种操作指令在前面学习CentOS都使用过。只是界面和预安装的软件有所差别。
+
+Ubuntu下载地址：http://cn.ubuntu.com/download
+
+![](/Snipaste_2020-10-09_21-26-16.png)
+
+### 18.2 Ubuntu的安装
+
+![](/Snipaste_2020-10-09_21-27-12.png)
+
+#### 18.2.2 设置U步辇图支持中文
+
+默认安装的ubuntu中只有英文语言，因此是不能显示汉字的。要正确显示汉字，需要安装中文语言包。
+
+安装中文支持步骤
+
+1.单击左侧图标栏打开SystemSettings（系统设置）菜单，点击打开LanguageSupport（语言支持）选项卡。
+
+2.点击Install/RemoveLanguages，在弹出的选项卡中下拉找到Chinese(Simplified)，即中文简体，在后面的选项框中打勾。然后点击ApplyChanges提交，系统会自动联网下载中文语言包。（保证ubuntu是联网的）。
+
+3.这时“汉语（中国）”在最后一位因为当前第一位是”English”，所以默认显示都是英文。我们如果希望默认显示用中文，则应该将“汉语（中国）”设置为第一位。设置方法是拖动，鼠标单击“汉语（中国）”，当底色变化（表示选中了）后，按住鼠标左键不松手，向上拖动放置到第一位。
+
+4.设置后不会即刻生效，需要下一次登录时才会生效
+
+![](/Snipaste_2020-10-09_21-28-02.png)
+
+### 18.3 Ubuntu 的root用户
+
+#### 18.3.1介绍
+
+安装ubuntu成功后，都是普通用户权限，并没有最高root权限，如果需要使用root权限的时候，通常都会在命令前面加上sudo。有的时候感觉很麻烦。
+
+我们一般使用su命令来直接切换到root用户的，但是如果没有给root设置初始密码，就会抛出su:Authenticationfailure这样的问题。所以，我们只要给root用户设置一个初始密码就好了。
+
+#### 18.3.2给root用户设置密码并使用
+
+1)输入sudopasswd命令，输入一般用户密码并设定root用户密码。
+
+2)设定root密码成功后，输入su命令，并输入刚才设定的root密码，就可以切换成root了。提示符$代表一般用户，提示符#代表root用户。
+
+3)输入exit命令，退出root并返回一般用户4)以后就可以使用root用户了
+
+![](/Snipaste_2020-10-09_21-28-55.png)
+
+### 18.4Ubuntu下开发Python
+
+#### 18.4.1说明
+
+安装好Ubuntu后，默认就已经安装好Python的开发环境[Python2.7和Python3.5]。
+
+![](/Snipaste_2020-10-09_21-29-28.png)
+
+#### 18.4.2在Ubuntu下开发一个Python程序
+
+1)	vimhello.py[编写hello.py]
+
+提示：如果Ubuntu没有vim我们可以根据提示信息安装一个vim
+
+apt install vim
+
+![](/Snipaste_2020-10-09_21-30-32.png)
+
+# 第1 9 章 Python定制篇apt软件管理和远程登录
+
+### 19.1apt介绍
+
+apt是AdvancedPackagingTool的简称，是一款安装包管理工具。在Ubuntu下，我们可以使用apt命令可用于软件包的安装、删除、清理等，类似于Windows中的软件管理工具。
+
+unbuntu软件管理的原理示意图
+
+![](/Snipaste_2020-10-09_21-31-56.png)
+
+### 19.2 Ubuntu 软件操作的相关命令
+
+sudoapt-getupdate更新源
+
+sudoapt-getinstallpackage安装包
+
+sudoapt-getremovepackage删除包
+
+sudoapt-cachesearchpackage搜索软件包
+
+sudoapt-cacheshowpackage获取包的相关信息，如说明、大小、版本等
+
+sudoapt-getinstallpackage--reinstall重新安装包
+
+sudoapt-get-finstall修复安装
+
+sudoapt-getremovepackage--purge删除包，包括配置文件等
+
+sudoapt-getbuild-deppackage安装相关的编译环境
+
+sudoapt-getupgrade更新已安装的包
+
+sudoapt-getdist-upgrade升级系统
+
+sudoapt-cachedependspackage了解使用该包依赖那些包
+
+sudoapt-cacherdependspackage查看该包被哪些包依赖
+
+sudoapt-getsourcepackage下载该包的源代码
+
+### 19.3更新Ubuntu软件下载地址
+
+#### 19.3.1原理示意图
+
+![](/Snipaste_2020-10-09_21-33-33.png)
+
+### 19.3.2寻找国内镜像源
+
+https://mirrors.tuna.tsinghua.edu.cn/
+
+所谓的镜像源：可以理解为提供下载
+
+软件的地方，比如Android手机上可以
+
+下载软件的安卓市场；iOS手机上可
+
+以下载软件的AppStor
+
+![](/Snipaste_2020-10-09_21-34-21.png)
+
+![](/Snipaste_2020-10-09_21-34-31.png)
+
+### 19.3.3 备份Ubuntu默认的源地址
+
+sudo cp/etc/apt/sources.list/etc/apt/sources.list.backup
+
+![](/Snipaste_2020-10-09_21-35-01.png)
+
+![](/Snipaste_2020-10-09_21-35-12.png)
+
+#### 19.3.4 更新源服务器列表
+
+![](/Snipaste_2020-10-09_21-35-29.png)
+
+### 19.4 Ubuntu软件安装，卸载的最佳实践
+
+#### 19.4.1案例说明：使用apt完成安装和卸载vim软件，并查询vim软件的信息：
+
+sudo apt-getremovevim
+
+![](/Snipaste_2020-10-09_21-36-04.png)
+
+sudo apt-get installvim
+
+![](/Snipaste_2020-10-09_21-36-31.png)
+
+sudo apt-cache show vim
+
+![](/Snipaste_2020-10-09_21-36-52.png)
+
+### 19.5使用ssh远程登录Ubuntu
+
+#### 19.5.1ssh介绍SSH
+
+为SecureShell的缩写，由IETF的网络工作小组（NetworkWorkingGroup）所制定；SSH为建立在应用层和传输层基础上的安全协议。
+
+SSH是目前较可靠，专为远程登录会话和其他网络服务提供安全性的协议。常用于远程登录，以及用户之间进行资料拷贝。几乎所有UNIX平台—包括HP-UX、Linux、AIX、Solaris、DigitalUNIX、Irix，以及其他平台，都可运行SSH。
+
+使用SSH服务，需要安装相应的服务器和客户端。客户端和服务器的关系：如果，A机器想被B机器远程控制，那么，A机器需要安装SSH服务器，B机器需要安装SSH客户端。
+
+和CentOS不一样，Ubuntu默认没有安装SSHD服务，因此，我们不能进行远程登录。
+
+#### 19.5.2原理示意图：
+
+![](/Snipaste_2020-10-09_21-37-39.png)
+
+### 19.6使用ssh远程登录Ubuntu
+
+#### 19.6.1安装SSH和启用
+
+sudo apt-get install openssh-server执行上面指令后，在当前这台Linux上就安装了SSH服务端和客户端。
+
+service sshd restart
+
+执行上面的指令，就启动了sshd服务。会监听端口22
+
+![](/Snipaste_2020-10-09_21-38-37.png)
+
+### 19.6.2 在Windows使用XShell5/XFTP5登录Ubuntu
+
+前面我们已经安装了XShell5，直接使用即可。
+
+注意：使用atguigu用户登录，需要的时候再su-切换成root用户
+
+![](/Snipaste_2020-10-09_21-39-05.png)
+
+#### 19.6.3 从linux系统客户机远程登陆linux系统服务机
+
+首先，我们需要在linux的系统客户机也要安装openssh-server
+
+•基本语法：
+
+ssh用户名@IP
+
+例如：sshatguigu@192.168.188.131
+
+使用ssh访问，如访问出现错误。可查看是否有该文件～/.ssh/known_ssh尝试删除该文件解决。
+
+•登出登出命令：exit或者logout
+
+
+
+![](/Snipaste_2020-10-09_21-40-16.png)
+
+我亦无他，惟手熟尔
+
+2020年10月9日
