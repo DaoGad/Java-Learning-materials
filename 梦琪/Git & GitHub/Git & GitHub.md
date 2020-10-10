@@ -109,6 +109,8 @@ https://blog.csdn.net/Della0930/article/details/89487914
 
 Git的提交对象以及其父对象形成了一个链条，跟链条下就是分支。分支的切换实际就是指针的切换
 
+### 2.2GitFow工作流了解过吗
+
 ## 3.Git实战
 
 ### 3.1无法pull远程仓库？
@@ -219,7 +221,7 @@ $ git push
 
 ![](/Snipaste_2020-10-10_09-42-16.png)
 
-### 4.指定远程仓库
+## 4.指定远程仓库
 
 ```
 1.查看自己定义的远程仓库，显示clone地址
@@ -229,7 +231,7 @@ $ git remote -v
 $ git remote add origin[别名] url[http网络地址]
 ```
 
-
+## 
 
 
 
