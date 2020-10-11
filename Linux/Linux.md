@@ -1949,6 +1949,62 @@ firewall-cmd --permanent --remove-port=123/tcp
 
 
 
+### 16.6 Redisa 安装
+
+#### 16.6.1 redis 下载
+
+https://redis.io/download
+
+![](/Snipaste_2020-10-10_09-30-41.png)
+
+这里下载的是5.0.9版本 6.0版本目前安装会出现问题
+
+#### 16.6.2 将 redis 安装文件上传到 linux 服务器
+
+1、解压
+
+tar -zxvf redis-XXX.tar.gz
+
+2、进入到 reids目录 进行编译
+
+make
+
+![](/Snipaste_2020-10-10_09-33-43.png)
+
+3、安装并指定安装目录
+
+**make install PREFIX=/usr/local/redis**
+
+![](/Snipaste_2020-10-10_09-35-33.png)
+
+4、拷贝 redis.conf 配置文件
+
+![](/Snipaste_2020-10-10_09-36-43.png)
+
+5、修改 redis.conf 配置文件
+
+![](/Snipaste_2020-10-10_09-38-25.png)
+
+6、启动 redis-server 和 redis-cli 进行测试
+
+指定配置文件进行启动
+
+![](/Snipaste_2020-10-10_09-39-15.png)
+
+![](/Snipaste_2020-10-10_09-39-34.png)
+
+指定端口进行启动
+
+7、测试
+
+![](/Snipaste_2020-10-10_09-40-09.png)
+
+
+
+参考文档 https://www.cnblogs.com/heqiuyong/p/10463334.html
+
+
+
 # 第 17 章 大数据定制篇 Shell编程
 
 ### 17.1 为什么要学 Shell 编程
