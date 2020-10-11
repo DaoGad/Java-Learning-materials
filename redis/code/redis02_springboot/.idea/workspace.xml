@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05489f95-1e4d-449e-88cd-1e8a72e3548c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gcc/redis02_springboot/config/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gcc/redis02_springboot/pojo/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gcc/redis02_springboot/utils/RedisUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../redistest/redistest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../redistest/src/main/java/com/redistest/TestPing.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../redistest/src/main/java/com/redistest/TestTx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../Linux/Linux.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Linux/Linux.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../SpriingBoot/Spring Boot 笔记/Spring Boot.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../SpriingBoot/Spring Boot 笔记/images/2018-02-04_123955.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../SpriingBoot/Spring Boot 笔记/images/concrete-bindings.png" beforeDir="false" />
@@ -44,6 +37,7 @@
       <change beforePath="$PROJECT_DIR$/../../../SpriingBoot/Spring Boot 笔记/images/搜狗截图20180306145727.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../SpriingBoot/Spring Boot 笔记/images/搜狗截图20180306145855.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../新建文件夹/新建文本文档.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../面试题第一季/面试题第一季.xmind" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,6 +162,7 @@
       <option name="presentableId" value="Default" />
       <updated>1602296203421</updated>
       <workItem from="1602296207290" duration="8336000" />
+      <workItem from="1602402002006" duration="153000" />
     </task>
     <servers />
   </component>
