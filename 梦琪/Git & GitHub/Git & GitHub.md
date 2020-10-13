@@ -168,7 +168,7 @@ https://blog.csdn.net/Chad97/article/details/88529647
 	3. 提交本地仓库/保存仓库的历史记录
 	$  git commit -m "first commit提交信息" 指定文件
 	
-	3.1修改提交信息
+	3.1修改提交信息/只会找上一个提交的日志
 	$ git commit --amend
 	
 	4. 下载远程代码并合并
