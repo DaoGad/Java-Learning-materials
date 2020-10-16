@@ -1,6 +1,9 @@
 package com.atguigu.interview.study.thread;
 
+<<<<<<< HEAD
+=======
 import java.util.concurrent.ThreadPoolExecutor;
+>>>>>>> 11b9498acbb674de9f78bfef065d73a1323fcaf0
 import java.util.concurrent.TimeUnit;
 
 class MyData {
@@ -31,7 +34,10 @@ class MyData {
  */
 public class VolatileDemo {
     public static void main(String[] args) { // 一切方法运行的入口
+<<<<<<< HEAD
+=======
         ThreadPoolExecutor poolExecutor =
+>>>>>>> 11b9498acbb674de9f78bfef065d73a1323fcaf0
 
         MyData myData = new MyData();
         for (int i = 1; i <=20; i++) {
