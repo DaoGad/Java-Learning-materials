@@ -276,10 +276,23 @@ Git 属于分散型版本管理系统，是为版本管理而设计的软件。
 
 ## 第五章 lssue
 
-### 5.1 查看master分支在最近7天的区别
+### 5.1 查看 master 分支在最近7天的区别
 
 https://github.com/gcq9527/Java-Learning-materials/tree/master/%E6%A2%A6%E7%90%AA/compare/master@{7.day.ago}...master
 
-### 5.2 查看与指定日期之间的差别
+### 5.2 lssue 作用
 
-- [ ] 完成
+设立里程碑，用 lssue 管理任务，那么管理 lssue 的系统成为 BTS（ Bug 跟踪管理系统）都可以使用 GFM 描述拥有 Tasklist 语法
+
+出现的场景
+
+- 发现软件的 Bug 并报告
+- 有事想问作者探讨
+- 事先列出今后准备实施的任务
+
+
+
+## 第6章 发送pull Request的准备
+
+
+
